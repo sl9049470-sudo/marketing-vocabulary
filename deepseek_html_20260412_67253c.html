@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Business English Pro — Маркетинг | Полный словарь + Рабочие игры</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Nunito:wght@300;400;600;700;800&family=Fira+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #0f0e17;
+            --card: #1a1828;
+            --card2: #221f35;
+            --accent1: #ff6b6b;
+            --accent2: #ffd93d;
+            --accent3: #6bcb77;
+            --accent4: #4d96ff;
+            --accent5: #c77dff;
+            --text: #fffffe;
+            --muted: #a7a9be;
+            --border: rgba(255,255,255,0.08);
+        }
+        body { background: var(--bg); color: var(--text); font-family: 'Nunito', sans-serif; padding: 20px 24px 48px; }
+        .app-container { max-width: 1280px; margin: 0 auto; }
+        .global-header { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; margin-bottom: 28px; gap: 12px; border-bottom: 1px solid var(--border); padding-bottom: 12px; }
+        .logo-area h1 { font-family: 'Playfair Display', serif; font-size: 1.8rem; background: linear-gradient(135deg, var(--accent2), var(--accent1), var(--accent5)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+        .score-panel { background: var(--card); border-radius: 40px; padding: 8px 20px; display: flex; gap: 24px; align-items: center; border: 1px solid var(--border); }
+        .score-value { font-family: 'Fira Mono', monospace; font-size: 1.4rem; font-weight: 700; color: var(--accent2); }
+        .reset-progress, .back-btn, .home-btn { background: var(--card); border: 1px solid var(--border); color: var(--muted); border-radius: 40px; padding: 6px 18px; cursor: pointer; transition: 0.2s; font-family: 'Nunito', sans-serif; display: inline-flex; align-items: center; gap: 6px; margin-bottom: 16px; text-decoration: none; }
+        .reset-progress:hover, .back-btn:hover, .home-btn:hover { background: var(--card2); color: var(--text); border-color: var(--accent4); }
+        .lesson-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-bottom: 32px; }
+        .lcard { background: var(--card); border-radius: 24px; overflow: hidden; cursor: pointer; transition: transform 0.25s; border: 1px solid var(--border); }
+        .lcard:hover { transform: translateY(-6px); }
+        .lcard-head { padding: 22px 20px 16px; }
+        .lcard-body { background: var(--card2); padding: 16px 20px; }
+        .lcard-prog { height: 5px; background: rgba(255,255,255,0.15); border-radius: 4px; margin: 10px 0; }
+        .game-grid-premium { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px; margin: 30px 0; }
+        .game-card-premium { background: linear-gradient(145deg, var(--card), var(--card2)); border-radius: 28px; padding: 20px 12px; text-align: center; cursor: pointer; transition: 0.3s; border: 1px solid var(--border); }
+        .game-card-premium:hover { transform: translateY(-5px); border-color: var(--accent4); }
+        .game-icon { font-size: 2.8rem; margin-bottom: 8px; }
+        .game-title { font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 800; }
+        .dict-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; margin-top: 20px; }
+        .wcard { background: var(--card); border-radius: 20px; border-left: 4px solid var(--accent4); overflow: hidden; }
+        .wci { padding: 16px 18px; }
+        .wen { font-family: 'Fira Mono', monospace; font-weight: 700; color: var(--accent2); }
+        .wru { color: var(--accent3); }
+        .word-actions { display: flex; justify-content: space-between; padding: 8px 16px; border-top: 1px solid var(--border); }
+        .wlbtn { background: var(--card2); border: none; border-radius: 30px; padding: 5px 14px; cursor: pointer; color: var(--muted); transition: 0.2s; }
+        .wlbtn.ok { background: var(--accent3); color: #0f0e17; }
+        .speaker-btn { background: none; border: none; font-size: 1.1rem; cursor: pointer; }
+        .search { width: 100%; padding: 12px 18px; background: var(--card2); border: 1px solid var(--border); border-radius: 60px; color: var(--text); margin-bottom: 20px; }
+        .game-container { background: linear-gradient(145deg, var(--card), #131126); border-radius: 40px; padding: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.4); margin-top: 16px; }
+        .big-card { background: linear-gradient(145deg, #25223f, #1a1828); border-radius: 48px; padding: 2.5rem 1rem; text-align: center; cursor: pointer; margin: 20px 0; transition: 0.2s; }
+        .flash-word { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 900; background: linear-gradient(135deg, #fff, var(--accent2)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+        .quiz-option-card { background: var(--card2); border-radius: 60px; padding: 12px; text-align: center; cursor: pointer; transition: 0.1s; border: 1px solid var(--border); margin: 6px; }
+        .quiz-option-card.qcor { background: var(--accent3); color: #0f0e17; }
+        .quiz-option-card.qwrg { background: #5a3a3a; color: var(--accent1); text-decoration: line-through; }
+        .direction-toggle { display: flex; gap: 12px; justify-content: center; margin: 16px 0; }
+        .dir-btn { background: var(--card2); border: 1px solid var(--border); border-radius: 40px; padding: 6px 20px; cursor: pointer; }
+        .dir-btn.active { background: var(--accent4); color: #0f0e17; }
+        .fbtn, .tfbtn { border: none; border-radius: 60px; padding: 10px 28px; font-weight: 800; cursor: pointer; margin: 8px; }
+        .fb-ok, .tf-t { background: var(--accent3); color: #0f0e17; }
+        .fb-no, .tf-f { background: #4a2a2a; color: var(--accent1); }
+        .match-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .match-item { background: var(--card2); border-radius: 50px; padding: 12px; text-align: center; cursor: pointer; margin: 8px 0; border: 2px solid transparent; transition: 0.1s; font-weight: 500; }
+        .match-item.selected { background: var(--accent4); color: #0f0e17; transform: scale(1.02); border-color: var(--accent4); }
+        .match-item.matched-correct { background: var(--accent3); color: #0f0e17; text-decoration: line-through; cursor: default; opacity: 0.8; pointer-events: none; border-color: var(--accent3); }
+        .match-item.wrong-flash { background: #8b3a3a; border-color: var(--accent1); animation: shakeWrong 0.3s ease; }
+        .typing-card { background: linear-gradient(145deg, var(--card), #131126); border-radius: 40px; padding: 2rem; text-align: center; }
+        .typing-input { width: 100%; padding: 12px; background: var(--card2); border: 1px solid var(--border); border-radius: 60px; text-align: center; }
+        .full-content-section { background: var(--card); border-radius: 32px; padding: 24px; margin-top: 40px; }
+        .content-accordion { background: var(--card2); border-radius: 20px; margin-bottom: 16px; overflow: hidden; }
+        .accordion-header { padding: 16px 24px; font-weight: 800; font-size: 1.1rem; cursor: pointer; background: rgba(255,255,255,0.03); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+        .accordion-content { padding: 20px 24px; display: none; background: var(--card2); }
+        .accordion-content.show { display: block; }
+        .words-grid-inline { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+        .word-bubble { background: var(--card); border-radius: 16px; padding: 10px 16px; border-left: 3px solid var(--accent4); transition: 0.1s; }
+        .word-bubble strong { color: var(--accent4); font-family: 'Fira Mono', monospace; font-size: 0.9rem; }
+        .word-bubble span { color: var(--accent3); font-size: 0.85rem; display: block; margin-top: 4px; }
+        .badge-single { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-top: 20px; }
+        .badge-card { background: var(--card2); border-radius: 28px; padding: 20px 30px; text-align: center; min-width: 140px; }
+        .badge-card.locked { filter: grayscale(0.8); opacity: 0.4; background: #2a2838; }
+        .badge-card.unlocked { background: linear-gradient(145deg, var(--card), var(--card2)); border: 1px solid var(--accent2); box-shadow: 0 0 15px rgba(255,217,61,0.2); }
+        .badge-icon { font-size: 3rem; margin-bottom: 8px; }
+        .badge-name { font-size: 0.9rem; font-weight: 700; }
+        .floating-toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--card2); padding: 12px 24px; border-radius: 60px; z-index: 1000; font-weight: bold; animation: fadeInOut 2s ease; border-left: 4px solid var(--accent2); }
+        /* Анимация получения награды */
+        .reward-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); z-index: 2000; display: flex; justify-content: center; align-items: center; animation: fadeInBg 0.3s ease; }
+        .reward-card { background: linear-gradient(145deg, var(--card), #1f1d35); border-radius: 60px; padding: 40px 50px; text-align: center; border: 2px solid var(--accent2); box-shadow: 0 0 50px rgba(255,217,61,0.5); animation: bounceIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
+        .reward-icon { font-size: 5rem; display: inline-block; animation: spinGlow 0.8s ease-in-out infinite alternate; filter: drop-shadow(0 0 15px gold); }
+        .reward-title { font-size: 2rem; font-weight: 800; margin: 20px 0 10px; background: linear-gradient(135deg, var(--accent2), var(--accent1)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+        .reward-message { font-size: 1.1rem; color: var(--accent3); }
+        .reward-heart { font-size: 2rem; margin-top: 15px; animation: pulse 0.6s ease-in-out infinite; }
+        @keyframes fadeInBg { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes bounceIn { 0% { transform: scale(0.3); opacity: 0; } 50% { transform: scale(1.05); } 100% { transform: scale(1); opacity: 1; } }
+        @keyframes spinGlow { 0% { transform: rotate(0deg) scale(1); text-shadow: 0 0 0 gold; } 100% { transform: rotate(10deg) scale(1.2); text-shadow: 0 0 20px gold; } }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
+        @keyframes fadeInOut { 0% { opacity: 0; transform: translateX(-50%) translateY(20px); } 15% { opacity: 1; transform: translateX(-50%) translateY(0); } 85% { opacity: 1; } 100% { opacity: 0; } }
+        @keyframes bounceCorrect { 0% { transform: scale(1); } 50% { transform: scale(1.05); background: var(--accent3); } 100% { transform: scale(1); } }
+        @keyframes shakeWrong { 0% { transform: translateX(0); } 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } 100% { transform: translateX(0); } }
+        .animate-correct { animation: bounceCorrect 0.3s ease; }
+        .animate-wrong { animation: shakeWrong 0.3s ease; background: #5a3a3a !important; }
+        @media (max-width: 640px) { body { padding: 16px; } .match-grid { grid-template-columns: 1fr; } .words-grid-inline { grid-template-columns: 1fr; } .reward-card { padding: 30px 20px; } .reward-icon { font-size: 3rem; } }
+    </style>
+</head>
+<body>
+<div class="app-container" id="vapp"></div>
+
+<script>
+    // ==============================================================
+    // ПОЛНЫЙ СЛОВАРЬ ИЗ ФАЙЛА 4.docx (все термины, фразы, конструкции)
+    // 6 уроков, более 150+ слов и выражений
+    // ==============================================================
+    const LESSONS_DATA = [
+        { id: 1, name: "Break-Even Analysis", desc: "Анализ безубыточности", icon: "📊", colorAccent: "#ff6b6b",
+          words: [
+              { e: "associated costs", r: "связанные издержки / затраты" }, { e: "break-even analysis", r: "анализ безубыточности" }, { e: "break-even point (BEP)", r: "точка безубыточности" }, { e: "contribution margin", r: "маржинальная прибыль" }, { e: "determine", r: "определять" }, { e: "entail", r: "влечь за собой, требовать" }, { e: "equation", r: "уравнение" }, { e: "excluded", r: "вычитаются" }, { e: "external parties", r: "внешние стороны, третьи стороны" }, { e: "fixed costs", r: "постоянные издержки / затраты" }, { e: "lower break-even point", r: "более низкая точка безубыточности" }, { e: "margin of safety", r: "запас прочности" }, { e: "metric and calculations", r: "метрики и вычисления" }, { e: "price levels", r: "уровни цен" }, { e: "price per individual unit", r: "цена за единицу продукции" }, { e: "regulators", r: "регулирующие органы" }, { e: "report a net profit or loss", r: "сообщить о чистой прибыли или убытке" }, { e: "revenues collected", r: "полученная прибыль" }, { e: "targeted desired sales mix", r: "целевой / желаемый уровень продаж" }, { e: "unit contribution margin", r: "удельная маржинальная прибыль" }, { e: "variable costs", r: "переменные издержки / затраты" }, { e: "confirm this figure by multiplying", r: "подтвердить эту цифру посредством умножения" }, { e: "assuming variable costs do not exceed sales revenue", r: "при условии, что переменные затраты не превышают выручку" }
+          ] },
+        { id: 2, name: "Corporate Finance", desc: "Корпоративные финансы", icon: "💰", colorAccent: "#6bcb77",
+          words: [
+              { e: "revenue", r: "доход, выручка" }, { e: "dividends", r: "дивиденды" }, { e: "retained profit", r: "нераспределённая прибыль" }, { e: "gross profit", r: "валовая прибыль" }, { e: "cost of goods sold", r: "себестоимость реализованных товаров" }, { e: "operating profit", r: "операционная прибыль" }, { e: "operating costs", r: "операционные расходы" }, { e: "net profit after tax", r: "чистая прибыль после уплаты налогов" }, { e: "depreciation", r: "амортизация, обесценивание" }, { e: "asset", r: "актив" }, { e: "liability", r: "обязательство, пассив" }, { e: "current assets", r: "оборотные активы" }, { e: "long-term assets", r: "долгосрочные активы" }, { e: "current liabilities", r: "краткосрочные обязательства" }, { e: "long-term liabilities", r: "долгосрочные обязательства" }, { e: "bank loan", r: "банковский кредит" }, { e: "shareholder's equity", r: "собственный капитал акционеров" }, { e: "inventory", r: "запасы, инвентарь" }, { e: "invoice", r: "счёт-фактура, накладная" }, { e: "founders", r: "основатели" }, { e: "mortgage", r: "ипотека" }, { e: "deducting the costs", r: "вычитая затраты" }, { e: "income earned", r: "полученный доход" }
+          ] },
+        { id: 3, name: "Marketing Mix", desc: "Маркетинг-микс (4P)", icon: "📣", colorAccent: "#ffd93d",
+          words: [
+              { e: "advertise", r: "рекламировать" }, { e: "affiliate", r: "филиал, отделение компании" }, { e: "appropriate", r: "соответствующий, подходящий" }, { e: "catchy phrase or slogan", r: "броская, «цепляющая» фраза или слоган" }, { e: "celebrity endorsements", r: "поддержка бренда знаменитостями" }, { e: "devise", r: "придумывать, разрабатывать" }, { e: "distribution expenses", r: "расходы на дистрибуцию" }, { e: "endorsement", r: "поддержка, одобрение" }, { e: "establish a price", r: "устанавливать цену" }, { e: "fulfill an absence", r: "заполнять пробел (отсутствие)" }, { e: "fulfill consumer demand", r: "удовлетворять требования / спрос покупателей" }, { e: "guerrilla marketing", r: "партизанский, малобюджетный маркетинг" }, { e: "key potential audience", r: "основная потенциальная аудитория" }, { e: "marketing costs", r: "расходы, затраты на маркетинг" }, { e: "marketing mix", r: "маркетинговый комплекс, маркетинг-микс" }, { e: "media exposure", r: "освещение в СМИ" }, { e: "on behalf of a company", r: "от имени компании" }, { e: "physical storefront", r: "физический магазин" }, { e: "product line", r: "линейка продуктов" }, { e: "profitability", r: "прибыльность" }, { e: "promote", r: "продвигать, стимулировать" }, { e: "reasonable alternative", r: "разумная альтернатива" }, { e: "substitute product", r: "продукт-заменитель" }, { e: "the Four Ps", r: "концепция «4 Р»" }, { e: "ultimately", r: "в конце концов, в конечном счёте" }, { e: "undertake", r: "предпринимать" }, { e: "unit cost price", r: "себестоимость единицы товара" }
+          ] },
+        { id: 4, name: "Social Media Marketing", desc: "SMM", icon: "📱", colorAccent: "#4d96ff",
+          words: [
+              { e: "adoption of engagement tool", r: "внедрение инструмента взаимодействия" }, { e: "appealing to", r: "обращение к" }, { e: "customer response rates", r: "доля ответов клиентов" }, { e: "demographic", r: "демографический" }, { e: "digital marketing and e-marketing", r: "цифровой и электронный маркетинг" }, { e: "draft plans", r: "разрабатывать планы" }, { e: "employ a broad range of tactics", r: "использовать широкий диапазон приёмов" }, { e: "enable", r: "позволять" }, { e: "engage with existing customers", r: "взаимодействовать с существующими клиентами" }, { e: "further their interests", r: "продвигать свои интересы" }, { e: "marketers", r: "маркетологи" }, { e: "metrics", r: "показатели" }, { e: "obstacle", r: "препятствие" }, { e: "pillar", r: "столп, основа" }, { e: "prospective customers", r: "потенциальные клиенты" }, { e: "purpose-built data analytics tools", r: "специально разработанные инструменты анализа данных" }, { e: "Return on Investment (ROI)", r: "окупаемость инвестиций" }, { e: "social media marketing (SMM)", r: "маркетинг в социальных сетях" }, { e: "stakeholders", r: "заинтересованные стороны" }, { e: "tailor their messages", r: "адаптировать свои сообщения" }, { e: "third-party reviewers", r: "сторонние обозреватели" }, { e: "track", r: "отслеживать" }, { e: "trade groups", r: "торговые группы" }, { e: "virality", r: "виральность" }, { e: "drive website traffic", r: "генерировать трафик на сайт" }, { e: "community of followers", r: "сообщество подписчиков" }, { e: "skilled and seasoned marketers", r: "опытные и квалифицированные маркетологи" }, { e: "gain insights", r: "получать аналитические данные" }
+          ] },
+        { id: 5, name: "E-Commerce", desc: "Электронная торговля", icon: "🛒", colorAccent: "#c77dff",
+          words: [
+              { e: "brick-and-mortar", r: "физический (традиционный магазин)" }, { e: "brick-and-mortar counterpart", r: "традиционные физические аналоги" }, { e: "conduct business", r: "вести бизнес" }, { e: "convenience", r: "удобство" }, { e: "digital marketplace", r: "цифровая торговая площадка" }, { e: "disadvantage", r: "недостаток" }, { e: "disruptive technology", r: "прорывная технология" }, { e: "distribution channels", r: "каналы распространения" }, { e: "drawback", r: "недостаток, минус" }, { e: "e-tailer", r: "онлайн-ритейлер" }, { e: "increased selection", r: "расширенный выбор" }, { e: "lack of instant gratification", r: "отсутствие мгновенного удовлетворения" }, { e: "license their artwork", r: "лицензировать свои произведения" }, { e: "market segments", r: "сегменты рынка" }, { e: "match consumer expectations", r: "соответствовать ожиданиям покупателей" }, { e: "online store", r: "онлайн-магазин" }, { e: "payment gateway", r: "платёжный шлюз" }, { e: "run a company", r: "управлять компанией" }, { e: "supplement tangible products", r: "дополнять материальные товары" }, { e: "third-party site", r: "сторонний сайт" }, { e: "data or currency to process a transaction", r: "данные или валюта для осуществления транзакции" }, { e: "features", r: "характеристики" }
+          ] },
+        { id: 6, name: "Negotiations", desc: "Переговоры", icon: "🤝", colorAccent: "#ff9f7c",
+          words: [
+              { e: "acceptable", r: "приемлемый" }, { e: "assume", r: "полагать, считать" }, { e: "at stake", r: "на кону, поставлено на карту" }, { e: "avoid arguing", r: "избегать споров" }, { e: "bargaining table", r: "стол переговоров" }, { e: "be certain", r: "убеждаться, быть уверенными" }, { e: "budge", r: "двигаться (с позиций), уступать" }, { e: "claims", r: "претензии" }, { e: "commitment", r: "приверженность" }, { e: "compensation offer", r: "предложение о компенсации" }, { e: "compromise", r: "компромисс" }, { e: "concede", r: "уступить" }, { e: "concession", r: "уступка" }, { e: "counter-arguments", r: "контраргументы" }, { e: "evidence", r: "доказательство" }, { e: "firm and final", r: "жёсткий и окончательный" }, { e: "give in", r: "уступать" }, { e: "initial offer", r: "первоначальное предложение" }, { e: "intermediaries", r: "посредники" }, { e: "involved parties", r: "вовлечённые стороны" }, { e: "lack of communication", r: "недостаток коммуникации" }, { e: "lack of trust", r: "отсутствие доверия" }, { e: "legitimate", r: "законный" }, { e: "obstacles", r: "препятствия" }, { e: "outcomes", r: "результаты" }, { e: "persuade", r: "убеждать" }, { e: "point of view", r: "точка зрения" }, { e: "reduce debts", r: "уменьшить сумму долга" }, { e: "resolve", r: "решать" }, { e: "retirement benefits", r: "пенсионные выплаты" }, { e: "seek substitute outcome", r: "добиваться альтернативных результатов" }, { e: "sense of fear", r: "чувство страха" }, { e: "substantiate", r: "обосновывать" }, { e: "valid", r: "правомерный" }, { e: "vary", r: "различаться" }
+          ] }
+    ];
+
+    // Глобальное состояние
+    let globalScore = 0;
+    let learnedWords = new Set();
+    let unlockedBadges = new Set();
+    let appState = { screen: "home", lessonId: 0 };
+    
+    // Игровые состояния
+    let flashDeck = [], flashIdx = 0, flashFlip = false;
+    let quizCurrent = null, quizHearts = 5, quizScore = 0, quizTotal = 0, quizDirection = "en", quizDone = false;
+    let matchWords = [], matchSelections = { en: null, ru: null }, matchMatched = new Set(), matchWrongFlag = false;
+    let tfCurrent = null;
+    let typingCurrent = null, typingFeedback = "", typingAnswered = false, typingDirection = "en2ru";
+
+    // Награды (уникальные, без дублей)
+    const ACHIEVEMENTS = [
+        { id: "star", name: "⭐ Звёздочка", threshold: 50, icon: "⭐" },
+        { id: "cake", name: "🎂 Тортик", threshold: 150, icon: "🍰" },
+        { id: "smile", name: "😊 Смайлик", threshold: 300, icon: "😁" },
+        { id: "crown", name: "👑 Корона", threshold: 500, icon: "👑" },
+        { id: "diamond", name: "💎 Алмаз", threshold: 800, icon: "💎" }
+    ];
+
+    function getWordsForGame(lid, excludeLearned = true) {
+        let words = (lid === 0) ? LESSONS_DATA.flatMap(l => l.words.map(w => ({...w, lid: l.id, lname: l.name, accent: l.colorAccent}))) : (LESSONS_DATA.find(l=>l.id===lid)?.words.map(w => ({...w, lid, lname: LESSONS_DATA.find(l=>l.id===lid).name, accent: LESSONS_DATA.find(l=>l.id===lid).colorAccent})) || []);
+        if(excludeLearned) return words.filter(w => !learnedWords.has(w.e));
+        return words;
+    }
+
+    function saveProgress() { localStorage.setItem("bs_score", globalScore); localStorage.setItem("bs_learned", JSON.stringify([...learnedWords])); localStorage.setItem("bs_badges", JSON.stringify([...unlockedBadges])); }
+    function loadProgress() { let s = localStorage.getItem("bs_score"); if(s) globalScore = parseInt(s); let l = localStorage.getItem("bs_learned"); if(l) { try { learnedWords = new Set(JSON.parse(l)); } catch(e) {} } let b = localStorage.getItem("bs_badges"); if(b) { try { unlockedBadges = new Set(JSON.parse(b)); } catch(e) {} } checkAndUnlockBadges(); }
+    
+    function showRewardAnimation(achievement) {
+        return new Promise((resolve) => {
+            let overlay = document.createElement('div');
+            overlay.className = 'reward-overlay';
+            overlay.innerHTML = `
+                <div class="reward-card">
+                    <div class="reward-icon">${achievement.icon}</div>
+                    <div class="reward-title">Поздравляю! 🎉</div>
+                    <div class="reward-message">Вы получили награду: ${achievement.name}</div>
+                    <div class="reward-heart">❤️ +50 очков к успеху!</div>
+                </div>
+            `;
+            document.body.appendChild(overlay);
+            setTimeout(() => {
+                overlay.remove();
+                resolve();
+            }, 2500);
+        });
+    }
+    
+    async function checkAndUnlockBadges() {
+        let newUnlock = false;
+        for (let a of ACHIEVEMENTS) {
+            if (globalScore >= a.threshold && !unlockedBadges.has(a.id)) {
+                unlockedBadges.add(a.id);
+                newUnlock = true;
+                saveProgress();
+                await showRewardAnimation(a);
+                render();
+            }
+        }
+        if (newUnlock) saveProgress();
+    }
+    
+    function addPoints(amt) { globalScore += amt; if(globalScore<0) globalScore=0; saveProgress(); checkAndUnlockBadges(); render(); }
+    function markWord(en) { if(!learnedWords.has(en)) { learnedWords.add(en); addPoints(5); showFloatingMessage(`📖 +5 очков! Слово выучено`, 1500); render(); } }
+    function unmarkWord(en) { if(learnedWords.has(en)) { learnedWords.delete(en); addPoints(-3); showFloatingMessage(`📖 Слово снято с изучения`, 1500); render(); } }
+    function showFloatingMessage(msg, duration) { let div = document.createElement('div'); div.className = 'floating-toast'; div.innerText = msg; document.body.appendChild(div); setTimeout(() => div.remove(), duration); }
+    function animateElement(el, type) { if(!el) return; el.classList.add(type === 'correct' ? 'animate-correct' : 'animate-wrong'); setTimeout(() => el.classList.remove(type === 'correct' ? 'animate-correct' : 'animate-wrong'), 400); }
+    function speakText(text) { let utterance = new SpeechSynthesisUtterance(text); utterance.lang = 'en-US'; utterance.rate = 0.85; window.speechSynthesis.cancel(); window.speechSynthesis.speak(utterance); }
+    function shuffle(arr) { for(let i=arr.length-1;i>0;i--) { let j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; } return arr; }
+
+    function initFlash(lid) { let words = getWordsForGame(lid, true); flashDeck = shuffle([...words]); flashIdx=0; flashFlip=false; }
+    function initQuiz(lid) { quizHearts=5; quizScore=0; quizTotal=0; quizDone=false; generateQuiz(lid); }
+    function generateQuiz(lid) { let words=getWordsForGame(lid, true); if(words.length<2) { quizCurrent=null; return; } let correct=words[Math.floor(Math.random()*words.length)]; let others=shuffle(words.filter(w=>w.e!==correct.e)).slice(0,3); let options=shuffle([correct,...others]); quizCurrent={correct,options,answered:false,selectedIdx:-1}; }
+    function initMatch(lid) { let words = getWordsForGame(lid, true); matchWords = shuffle(words).slice(0,6); matchSelections = { en: null, ru: null }; matchMatched.clear(); matchWrongFlag = false; }
+    function initTF(lid) { let words=getWordsForGame(lid, true); if(words.length) { let w=words[Math.floor(Math.random()*words.length)]; let isTrue=Math.random()>0.45; let wrong=words.filter(ww=>ww.e!==w.e)[0]?.r||"неверно"; tfCurrent={en:w.e, ru:isTrue?w.r:wrong, correctFlag:isTrue, answered:false}; } }
+    function initTyping(lid) { let words=getWordsForGame(lid, true); if(words.length) typingCurrent=words[Math.floor(Math.random()*words.length)]; typingAnswered=false; typingFeedback=""; }
+
+    // ========== РЕНДЕРЫ ==========
+    function renderHome() {
+        let total = LESSONS_DATA.reduce((s,l)=>s+l.words.length,0);
+        let learnedCount = learnedWords.size;
+        return `<div class="global-header"><div class="logo-area"><h1>📘 Business English Pro</h1><p>Unit 2 · Marketing — полный словарь из 4.docx</p></div>
+        <div class="score-panel"><div><div class="score-label">⭐ ОЧКИ</div><div class="score-value">${globalScore}</div></div><button class="reset-progress" id="resetBtn">⟳ Сброс</button></div></div>
+        <div style="background:var(--card); border-radius:28px; padding:16px; margin-bottom:20px;">📖 Выучено: ${learnedCount}/${total} (${Math.round(learnedCount/total*100)}%)</div>
+        <div class="lesson-grid">${LESSONS_DATA.map(l=>{ let lc=getWordsForGame(l.id, false).filter(w=>learnedWords.has(w.e)).length; let pct=Math.round(lc/l.words.length*100); return `<div class="lcard" onclick="goToLesson(${l.id})"><div class="lcard-head"><div style="font-size:32px">${l.icon}</div><div style="font-weight:800;color:${l.colorAccent}">${l.name}</div><div class="lcard-prog"><div class="lcard-pfill" style="width:${pct}%;background:${l.colorAccent}"></div></div></div><div class="lcard-body"><div>${lc}/${l.words.length}</div><button style="background:${l.colorAccent}; border:none; border-radius:40px; padding:6px; width:100%;">Открыть →</button></div></div>`; }).join('')}</div>
+        <div class="game-grid-premium"><div class="game-card-premium" onclick="startGlobal('flash')"><div class="game-icon">🃏</div><div class="game-title">Flashcards</div></div>
+        <div class="game-card-premium" onclick="startGlobal('quiz')"><div class="game-icon">🎯</div><div class="game-title">Quiz</div></div>
+        <div class="game-card-premium" onclick="startGlobal('match')"><div class="game-icon">🔗</div><div class="game-title">Match</div></div>
+        <div class="game-card-premium" onclick="startGlobal('tf')"><div class="game-icon">✓✗</div><div class="game-title">True/False</div></div>
+        <div class="game-card-premium" onclick="startGlobal('typing')"><div class="game-icon">⌨️</div><div class="game-title">Typing</div></div></div>
+        <div class="full-content-section"><h2>🏆 НАГРАДЫ</h2><div class="badge-single">${ACHIEVEMENTS.map(a => `<div class="badge-card ${unlockedBadges.has(a.id) ? 'unlocked' : 'locked'}"><div class="badge-icon">${a.icon}</div><div class="badge-name">${a.name}</div><div style="font-size:0.7rem;margin-top:4px">${a.threshold} очков</div></div>`).join('')}</div></div>
+        <div class="full-content-section"><h2>📚 ПОЛНОЕ СОДЕРЖАНИЕ КУРСА</h2>${LESSONS_DATA.map(l => `<div class="content-accordion"><div class="accordion-header" onclick="toggleAccordion(this)">📘 ${l.name} (${l.words.length} терминов) ▼</div><div class="accordion-content"><div class="words-grid-inline">${l.words.map(w => `<div class="word-bubble"><strong>${w.e}</strong><span>${w.r}</span></div>`).join('')}</div></div></div>`).join('')}</div>`;
+    }
+    
+    function renderLessonMenu(lid) {
+        let lesson = LESSONS_DATA.find(l=>l.id===lid);
+        let words = getWordsForGame(lid, false);
+        let knownCount = words.filter(w=>learnedWords.has(w.e)).length;
+        return `<button class="home-btn" onclick="goHome()">🏠 Домой</button>
+        <div style="background:${lesson.colorAccent}20; border-radius:32px; padding:20px; margin-bottom:20px;"><div style="font-size:2rem">${lesson.icon}</div><div style="font-weight:800;color:${lesson.colorAccent}">${lesson.name}</div><div class="lcard-prog"><div class="lcard-pfill" style="width:${Math.round(knownCount/lesson.words.length*100)}%;background:${lesson.colorAccent}"></div></div><div>${knownCount}/${lesson.words.length} слов</div></div>
+        <div class="game-grid-premium"><div class="game-card-premium" onclick="startGame('dict',${lid})"><div class="game-icon">📖</div><div class="game-title">Словарь</div></div>
+        <div class="game-card-premium" onclick="startGame('flash',${lid})"><div class="game-icon">🃏</div><div class="game-title">Флеш</div></div>
+        <div class="game-card-premium" onclick="startGame('quiz',${lid})"><div class="game-icon">🎯</div><div class="game-title">Тест</div></div>
+        <div class="game-card-premium" onclick="startGame('match',${lid})"><div class="game-icon">🔗</div><div class="game-title">Матч</div></div>
+        <div class="game-card-premium" onclick="startGame('tf',${lid})"><div class="game-icon">✓✗</div><div class="game-title">Верно/Ложь</div></div>
+        <div class="game-card-premium" onclick="startGame('typing',${lid})"><div class="game-icon">⌨️</div><div class="game-title">Напиши</div></div></div>`;
+    }
+    
+    function renderDictionary(lid) {
+        let words = getWordsForGame(lid, false);
+        return `<button class="home-btn" onclick="goHome()">🏠 Домой</button>
+        <div style="display:flex;gap:12px;margin-bottom:16px;"><div style="background:var(--card);padding:12px;border-radius:20px;flex:1;text-align:center"><div class="score-value">${words.length}</div><div>всего</div></div><div style="background:var(--card);padding:12px;border-radius:20px;flex:1;text-align:center"><div class="score-value" style="color:var(--accent3)">${words.filter(w=>learnedWords.has(w.e)).length}</div><div>выучено</div></div></div>
+        <input class="search" id="dictSearch" placeholder="🔍 Поиск..." onkeyup="filterDict()">
+        <div class="dict-grid" id="dictGrid">${words.map(w=>`<div class="wcard"><div class="wci"><div class="wen">${w.e}</div><div class="wru">${w.r}</div></div><div class="word-actions"><button class="speaker-btn" onclick="speakText('${w.e.replace(/'/g,"\\'")}')">🔊</button><button class="wlbtn ${learnedWords.has(w.e)?'ok':''}" onclick="toggleWord('${w.e.replace(/'/g,"\\'")}',${lid})">${learnedWords.has(w.e)?'Выучено ✓':'Отметить'}</button></div></div>`).join('')}</div>`;
+    }
+    
+    function renderFlash(lid) { if(!flashDeck.length) initFlash(lid); if(flashDeck.length===0) return `<button class="home-btn" onclick="goHome()">🏠 Домой</button><div class="game-container"><div style="text-align:center"><div>🏆 Все слова выучены!</div></div></div>`; let w=flashDeck[flashIdx]; return `<button class="home-btn" onclick="goHome()">🏠 Домой</button><div class="game-container"><div class="big-card" onclick="flashFlip=!flashFlip;render()"><div class="flash-word">${flashFlip? w.r : w.e}</div><div style="margin-top:12px;color:var(--muted)">👆 нажми для перевода</div></div><div style="display:flex;gap:16px;justify-content:center"><button class="fbtn fb-no" onclick="nextFlash(false,${lid})">✗ Пропустить</button><button class="fbtn fb-ok" onclick="nextFlash(true,${lid})">✓ Знаю (+3)</button></div><div style="text-align:center;margin-top:16px">${flashIdx+1}/${flashDeck.length}</div></div>`; }
+    function nextFlash(know,lid) { if(know && flashDeck[flashIdx]) { markWord(flashDeck[flashIdx].e); showFloatingMessage("✅ +3 очка!", 1000); } flashIdx++; flashFlip=false; if(flashIdx>=flashDeck.length && flashDeck.length>0) addPoints(10); render(); }
+    
+    function renderQuiz(lid) { if(!quizCurrent) initQuiz(lid); if(!quizCurrent) return `<button class="home-btn" onclick="goHome()">🏠 Домой</button><div class="game-container"><div>Нет слов для теста</div></div>`; if(quizHearts<=0) return `<button class="home-btn" onclick="goHome()">🏠 Домой</button><div class="game-container"><div>💀 Тест окончен. Счёт: ${quizScore}/${quizTotal}</div><button class="back-btn" onclick="initQuiz(${lid});render()">Заново</button></div>`; let q=quizCurrent; return `<button class="home-btn" onclick="goHome()">🏠 Домой</button><div class="game-container"><div style="display:flex;justify-content:space-between"><span>❤️ ${'❤️'.repeat(quizHearts)}</span><span>${quizScore}/${quizTotal}</span></div><div class="direction-toggle"><button class="dir-btn ${quizDirection==='en'?'active':''}" onclick="quizDirection='en';initQuiz(${lid});render()">🇬🇧→Рус</button><button class="dir-btn ${quizDirection==='ru'?'active':''}" onclick="quizDirection='ru';initQuiz(${lid});render()">🇷🇺→Eng</button></div><div class="big-card"><div class="flash-word" style="font-size:1.6rem">${quizDirection==='en'?q.correct.e:q.correct.r}</div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">${q.options.map((opt,i)=>`<div class="quiz-option-card ${q.answered?(opt.e===q.correct.e?'qcor':(q.selectedIdx===i?'qwrg':'')):''}" onclick="${q.answered?'':`answerQuizWrap(${i},${lid})`}">${quizDirection==='en'?opt.r:opt.e}</div>`).join('')}</div>${q.answered?`<button class="fbtn fb-ok" style="margin-top:20px" onclick="nextQuizWrap(${lid})">Следующий →</button>`:''}</div>`; }
+    function answerQuizWrap(idx,lid) { if(quizCurrent.answered) return; let correct = (quizCurrent.options[idx].e === quizCurrent.correct.e); let targetEl = document.querySelectorAll('.quiz-option-card')[idx]; if(correct) { animateElement(targetEl, 'correct'); showFloatingMessage("✅ +10 очков!", 1000); } else { animateElement(targetEl, 'wrong'); showFloatingMessage("❌ Неправильно!", 1000); } quizCurrent.answered=true; quizCurrent.selectedIdx=idx; quizTotal++; if(correct) { quizScore++; addPoints(10); markWord(quizCurrent.correct.e); } else { quizHearts--; if(quizHearts<=0) quizDone=true; } render(); }
+    function nextQuizWrap(lid) { generateQuiz(lid); render(); }
+    
+    function renderMatch(lid) { 
+        if(!matchWords.length) initMatch(lid); 
+        if(matchWords.length===0) return `<button class="home-btn" onclick="goHome()">🏠 Домой</button><div class="game-container"><div>Нет слов для матча</div></div>`; 
+        if(matchMatched.size === matchWords.length) { 
+            addPoints(15); 
+            return `<button class="home-btn" onclick="goHome()">🏠 Домой</button><div class="game-container"><div style="text-align:center"><div>🎉 Победа! +15 очков</div><button class="back-btn" onclick="initMatch(${lid});render()">Новый раунд</button></div></div>`; 
+        } 
+        let enList = matchWords.map((w,i)=>({text:w.e, idx:i})); 
+        let ruList = shuffle(matchWords.map((w,i)=>({text:w.r, idx:i}))); 
+        return `<button class="home-btn" onclick="goHome()">🏠 Домой</button><div class="game-container"><div style="margin-bottom:12px">Совпадений: ${matchMatched.size}/${matchWords.length}</div><div class="match-grid"><div class="match-col">${enList.map(item=>`<div class="match-item ${matchMatched.has(item.idx)?'matched-correct':''} ${matchSelections.en===item.idx?'selected':''}" data-en-idx="${item.idx}" onclick="selectMatchWrap('en',${item.idx},${lid})">${item.text}</div>`).join('')}</div><div class="match-col">${ruList.map(item=>`<div class="match-item ${matchMatched.has(item.idx)?'matched-correct':''} ${matchSelections.ru===item.idx?'selected':''}" data-ru-idx="${item.idx}" onclick="selectMatchWrap('ru',${item.idx},${lid})">${item.text}</div>`).join('')}</div></div></div>`; 
+    }
+    
+    function selectMatchWrap(type, idx, lid) { 
+        if(matchMatched.has(idx)) return; 
+        if(matchWrongFlag) return;
+        if(type === 'en') { 
+            if(matchSelections.en === idx) { matchSelections.en = null; render(); return; }
+            matchSelections.en = idx; 
+        } else { 
+            if(matchSelections.ru === idx) { matchSelections.ru = null; render(); return; }
+            matchSelections.ru = idx; 
+        } 
+        if(matchSelections.en !== null && matchSelections.ru !== null) { 
+            if(matchSelections.en === matchSelections.ru) { 
+                matchMatched.add(matchSelections.en); 
+                addPoints(5); 
+                markWord(matchWords[matchSelections.en].e); 
+                showFloatingMessage("🔗 Пара найдена! +5", 1000);
+                matchSelections = { en: null, ru: null }; 
+                render(); 
+            } else { 
+                matchWrongFlag = true;
+                let enEl = document.querySelector(`.match-item[data-en-idx="${matchSelections.en}"]`);
+                let ruEl = document.querySelector(`.match-item[data-ru-idx="${matchSelections.ru}"]`);
+                if(enEl) { enEl.classList.add('wrong-flash'); setTimeout(() => enEl.classList.remove('wrong-flash'), 400); }
+                if(ruEl) { ruEl.classList.add('wrong-flash'); setTimeout(() => ruEl.classList.remove('wrong-flash'), 400); }
+                showFloatingMessage("❌ Неправильная пара! Попробуйте ещё раз", 1000);
+                matchSelections = { en: null, ru: null };
+                setTimeout(() => { matchWrongFlag = false; render(); }, 450);
+                render();
+            } 
+        } else { 
+            render(); 
+        } 
+    }
+    
+    function renderTF(lid) { if(!tfCurrent) initTF(lid); if(!tfCurrent) return `<button class="home-btn" onclick="goHome()">🏠 Домой</button><div class="game-container"><div>Нет слов</div></div>`; if(tfCurrent.answered) return `<button class="home-btn" onclick="goHome()">🏠 Домой</button><div class="game-container"><div>${tfCurrent.correctFlag===tfCurrent.userOk?'✅ Верно +5':'❌ Ошибка'}</div><button class="back-btn" onclick="initTF(${lid});render()">Далее</button></div>`; return `<button class="home-btn" onclick="goHome()">🏠 Домой</button><div class="game-container"><div class="big-card"><div class="flash-word">${tfCurrent.en}</div><div class="flash-translation">→ ${tfCurrent.ru}</div></div><div style="display:flex;gap:16px;justify-content:center"><button class="tfbtn tf-t" onclick="answerTFWrap(true,${lid})">✓ Верно</button><button class="tfbtn tf-f" onclick="answerTFWrap(false,${lid})">✗ Ложь</button></div></div>`; }
+    function answerTFWrap(ans,lid) { if(tfCurrent.answered) return; let isCorrect = (ans === tfCurrent.correctFlag); let targetEl = document.querySelector('.big-card'); if(isCorrect) { animateElement(targetEl, 'correct'); showFloatingMessage("✅ +5 очков!", 1000); } else { animateElement(targetEl, 'wrong'); showFloatingMessage("❌ Неверно!", 1000); } tfCurrent.answered=true; tfCurrent.userOk=ans; if(isCorrect) { addPoints(5); markWord(tfCurrent.en); } setTimeout(()=>{ initTF(lid); render(); },1000); render(); }
+    
+    function renderTyping(lid) { if(!typingCurrent) initTyping(lid); if(!typingCurrent) return `<button class="home-btn" onclick="goHome()">🏠 Домой</button><div class="game-container"><div>🌟 Все выучено!</div></div>`; return `<button class="home-btn" onclick="goHome()">🏠 Домой</button><div class="game-container"><div class="direction-toggle"><button class="dir-btn ${typingDirection==='en2ru'?'active':''}" onclick="typingDirection='en2ru';initTyping(${lid});render()">🇬🇧→🇷🇺</button><button class="dir-btn ${typingDirection==='ru2en'?'active':''}" onclick="typingDirection='ru2en';initTyping(${lid});render()">🇷🇺→🇬🇧</button></div><div class="typing-card"><div class="flash-word" style="font-size:1.4rem">${typingDirection==='en2ru'? typingCurrent.e : typingCurrent.r}</div><input id="typingInput" class="typing-input" placeholder="Введите перевод..." autocomplete="off"><div class="typing-feedback" style="margin-top:12px">${typingFeedback}</div><button class="fbtn fb-ok" onclick="submitTypingWrap(${lid})">Проверить</button></div></div>`; }
+    function submitTypingWrap(lid) { let inp = document.getElementById('typingInput'); if(!inp) return; let input = inp.value; if(typingAnswered) return; let expected = (typingDirection === 'en2ru') ? typingCurrent.r.toLowerCase() : typingCurrent.e.toLowerCase(); if(input.trim().toLowerCase() === expected) { typingFeedback="✅ Верно! +6 очков"; addPoints(6); markWord(typingCurrent.e); showFloatingMessage("✅ +6 очков!", 1000); typingAnswered=true; setTimeout(()=>{ initTyping(lid); render(); },1200); } else { let correctAns = (typingDirection === 'en2ru') ? typingCurrent.r : typingCurrent.e; typingFeedback=`❌ Ошибка. Правильно: "${correctAns}"`; animateElement(document.querySelector('.typing-card'), 'wrong'); showFloatingMessage("❌ Неправильно!", 1000); typingAnswered=true; setTimeout(()=>{ initTyping(lid); render(); },1300); } render(); }
+
+    // Глобальные функции для onclick
+    window.filterDict = () => { let val = document.getElementById('dictSearch')?.value.toLowerCase()||''; document.querySelectorAll('#dictGrid .wcard').forEach(c=>c.style.display=c.innerText.toLowerCase().includes(val)?'':'none'); };
+    window.toggleWord = (en,lid) => { if(learnedWords.has(en)) unmarkWord(en); else markWord(en); render(); };
+    window.toggleAccordion = (el) => { let content = el.nextElementSibling; content.classList.toggle('show'); };
+    window.goHome = () => { appState = { screen: "home", lessonId: 0 }; render(); };
+    window.goToLesson = (lid) => { appState = { screen: "lhome", lessonId: lid }; render(); };
+    window.startGame = (game, lid) => { appState = { screen: game, lessonId: lid }; if(game==='flash') initFlash(lid); if(game==='quiz') initQuiz(lid); if(game==='match') initMatch(lid); if(game==='tf') initTF(lid); if(game==='typing') initTyping(lid); render(); };
+    window.startGlobal = (game) => window.startGame(game, 0);
+    
+    function render() {
+        let s = appState.screen, lid = appState.lessonId;
+        let html = "";
+        if(s === "home") html = renderHome();
+        else if(s === "lhome") html = renderLessonMenu(lid);
+        else if(s === "dict") html = renderDictionary(lid);
+        else if(s === "flash") html = renderFlash(lid);
+        else if(s === "quiz") html = renderQuiz(lid);
+        else if(s === "match") html = renderMatch(lid);
+        else if(s === "tf") html = renderTF(lid);
+        else if(s === "typing") html = renderTyping(lid);
+        else html = renderHome();
+        document.getElementById('vapp').innerHTML = html;
+        if(document.getElementById('resetBtn')) document.getElementById('resetBtn').onclick = () => { if(confirm("Сбросить весь прогресс?")){ globalScore=0; learnedWords.clear(); unlockedBadges.clear(); saveProgress(); render(); } };
+    }
+    
+    loadProgress();
+    render();
+</script>
+</body>
+</html>
