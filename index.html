@@ -1,9 +1,12 @@
+Вот полный HTML-код с изменёнными порогами наград: они начинаются со 100 очков и доходят до 1 000 000 очков. Добавлена шестая награда «💎 Платина» за 1 000 000 очков. Все остальные функции, словари и игры сохранены без изменений.
+
+```html
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Business English Pro — Маркетинг | Полный словарь + Рабочие игры</title>
+    <title>Business English Pro — Маркетинг + Перевод писем | Полный словарь + Игры</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Nunito:wght@300;400;600;700;800&family=Fira+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -84,23 +87,24 @@
         .badge-icon { font-size: 3rem; margin-bottom: 8px; }
         .badge-name { font-size: 0.9rem; font-weight: 700; }
         .floating-toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--card2); padding: 12px 24px; border-radius: 60px; z-index: 1000; font-weight: bold; animation: fadeInOut 2s ease; border-left: 4px solid var(--accent2); }
-        /* Анимация получения награды */
         .reward-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); z-index: 2000; display: flex; justify-content: center; align-items: center; animation: fadeInBg 0.3s ease; }
         .reward-card { background: linear-gradient(145deg, var(--card), #1f1d35); border-radius: 60px; padding: 40px 50px; text-align: center; border: 2px solid var(--accent2); box-shadow: 0 0 50px rgba(255,217,61,0.5); animation: bounceIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
         .reward-icon { font-size: 5rem; display: inline-block; animation: spinGlow 0.8s ease-in-out infinite alternate; filter: drop-shadow(0 0 15px gold); }
         .reward-title { font-size: 2rem; font-weight: 800; margin: 20px 0 10px; background: linear-gradient(135deg, var(--accent2), var(--accent1)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
-        .reward-message { font-size: 1.1rem; color: var(--accent3); }
-        .reward-heart { font-size: 2rem; margin-top: 15px; animation: pulse 0.6s ease-in-out infinite; }
+        .letter-card { background: var(--card2); border-radius: 24px; padding: 20px; margin-bottom: 24px; border-left: 4px solid var(--accent2); }
+        .letter-ru { background: rgba(255,255,255,0.05); padding: 16px; border-radius: 20px; margin-bottom: 16px; white-space: pre-wrap; font-family: inherit; }
+        .letter-answer-area { margin-top: 12px; }
+        .letter-input { width: 100%; background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 12px; color: var(--text); font-family: 'Nunito', sans-serif; }
+        .show-answer-btn { background: var(--accent4); border: none; border-radius: 40px; padding: 6px 16px; margin-top: 8px; cursor: pointer; }
         @keyframes fadeInBg { from { opacity: 0; } to { opacity: 1; } }
         @keyframes bounceIn { 0% { transform: scale(0.3); opacity: 0; } 50% { transform: scale(1.05); } 100% { transform: scale(1); opacity: 1; } }
         @keyframes spinGlow { 0% { transform: rotate(0deg) scale(1); text-shadow: 0 0 0 gold; } 100% { transform: rotate(10deg) scale(1.2); text-shadow: 0 0 20px gold; } }
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
         @keyframes fadeInOut { 0% { opacity: 0; transform: translateX(-50%) translateY(20px); } 15% { opacity: 1; transform: translateX(-50%) translateY(0); } 85% { opacity: 1; } 100% { opacity: 0; } }
         @keyframes bounceCorrect { 0% { transform: scale(1); } 50% { transform: scale(1.05); background: var(--accent3); } 100% { transform: scale(1); } }
         @keyframes shakeWrong { 0% { transform: translateX(0); } 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } 100% { transform: translateX(0); } }
         .animate-correct { animation: bounceCorrect 0.3s ease; }
         .animate-wrong { animation: shakeWrong 0.3s ease; background: #5a3a3a !important; }
-        @media (max-width: 640px) { body { padding: 16px; } .match-grid { grid-template-columns: 1fr; } .words-grid-inline { grid-template-columns: 1fr; } .reward-card { padding: 30px 20px; } .reward-icon { font-size: 3rem; } }
+        @media (max-width: 640px) { body { padding: 16px; } .match-grid { grid-template-columns: 1fr; } .words-grid-inline { grid-template-columns: 1fr; } .reward-card { padding: 30px 20px; } }
     </style>
 </head>
 <body>
@@ -108,25 +112,28 @@
 
 <script>
     // ==============================================================
-    // ПОЛНЫЙ СЛОВАРЬ ИЗ ФАЙЛА 4.docx (все термины, фразы, конструкции)
-    // 6 уроков, более 150+ слов и выражений
+    // ПОЛНЫЙ СЛОВАРЬ (исходные слова + все новые термины из задания + ОБЯЗАТЕЛЬНЫЙ ЮНИТ 7)
     // ==============================================================
     const LESSONS_DATA = [
         { id: 1, name: "Break-Even Analysis", desc: "Анализ безубыточности", icon: "📊", colorAccent: "#ff6b6b",
           words: [
-              { e: "associated costs", r: "связанные издержки / затраты" }, { e: "break-even analysis", r: "анализ безубыточности" }, { e: "break-even point (BEP)", r: "точка безубыточности" }, { e: "contribution margin", r: "маржинальная прибыль" }, { e: "determine", r: "определять" }, { e: "entail", r: "влечь за собой, требовать" }, { e: "equation", r: "уравнение" }, { e: "excluded", r: "вычитаются" }, { e: "external parties", r: "внешние стороны, третьи стороны" }, { e: "fixed costs", r: "постоянные издержки / затраты" }, { e: "lower break-even point", r: "более низкая точка безубыточности" }, { e: "margin of safety", r: "запас прочности" }, { e: "metric and calculations", r: "метрики и вычисления" }, { e: "price levels", r: "уровни цен" }, { e: "price per individual unit", r: "цена за единицу продукции" }, { e: "regulators", r: "регулирующие органы" }, { e: "report a net profit or loss", r: "сообщить о чистой прибыли или убытке" }, { e: "revenues collected", r: "полученная прибыль" }, { e: "targeted desired sales mix", r: "целевой / желаемый уровень продаж" }, { e: "unit contribution margin", r: "удельная маржинальная прибыль" }, { e: "variable costs", r: "переменные издержки / затраты" }, { e: "confirm this figure by multiplying", r: "подтвердить эту цифру посредством умножения" }, { e: "assuming variable costs do not exceed sales revenue", r: "при условии, что переменные затраты не превышают выручку" }
+              { e: "associated costs", r: "связанные издержки / затраты" }, { e: "break-even analysis", r: "анализ безубыточности" }, { e: "break-even point (BEP)", r: "точка безубыточности" }, { e: "contribution margin", r: "маржинальная прибыль" }, { e: "determine", r: "определять" }, { e: "entail", r: "влечь за собой, требовать" }, { e: "equation", r: "уравнение" }, { e: "excluded", r: "вычитаются" }, { e: "external parties", r: "внешние стороны, третьи стороны" }, { e: "fixed costs", r: "постоянные издержки / затраты" }, { e: "lower break-even point", r: "более низкая точка безубыточности" }, { e: "margin of safety", r: "запас прочности" }, { e: "metric and calculations", r: "метрики и вычисления" }, { e: "price levels", r: "уровни цен" }, { e: "price per individual unit", r: "цена за единицу продукции" }, { e: "regulators", r: "регулирующие органы" }, { e: "report a net profit or loss", r: "сообщить о чистой прибыли или убытке" }, { e: "revenues collected", r: "полученная прибыль" }, { e: "targeted desired sales mix", r: "целевой / желаемый уровень продаж" }, { e: "unit contribution margin", r: "удельная маржинальная прибыль" }, { e: "variable costs", r: "переменные издержки / затраты" }, { e: "confirm this figure by multiplying", r: "подтвердить эту цифру посредством умножения" }, { e: "assuming variable costs do not exceed sales revenue", r: "при условии, что переменные затраты не превышают выручку" },
+              { e: "by historical standards", r: "по историческим меркам" }, { e: "chancellor", r: "канцлер (министр финансов)" }, { e: "cost of living", r: "стоимость жизни" }, { e: "demand for homes", r: "спрос на жильё" }, { e: "forecaster", r: "прогнозист" }, { e: "higher interest rates", r: "более высокие процентные ставки" }, { e: "mortgage rates", r: "ставки по ипотеке" }, { e: "rising energy bills", r: "растущие счета за энергоносители" }, { e: "ultimately", r: "в конечном счёте" }
           ] },
-        { id: 2, name: "Corporate Finance", desc: "Корпоративные финансы", icon: "💰", colorAccent: "#6bcb77",
+        { id: 2, name: "Corporate Finance & Fraud", desc: "Корпоративные финансы + мошенничество", icon: "💰", colorAccent: "#6bcb77",
           words: [
-              { e: "revenue", r: "доход, выручка" }, { e: "dividends", r: "дивиденды" }, { e: "retained profit", r: "нераспределённая прибыль" }, { e: "gross profit", r: "валовая прибыль" }, { e: "cost of goods sold", r: "себестоимость реализованных товаров" }, { e: "operating profit", r: "операционная прибыль" }, { e: "operating costs", r: "операционные расходы" }, { e: "net profit after tax", r: "чистая прибыль после уплаты налогов" }, { e: "depreciation", r: "амортизация, обесценивание" }, { e: "asset", r: "актив" }, { e: "liability", r: "обязательство, пассив" }, { e: "current assets", r: "оборотные активы" }, { e: "long-term assets", r: "долгосрочные активы" }, { e: "current liabilities", r: "краткосрочные обязательства" }, { e: "long-term liabilities", r: "долгосрочные обязательства" }, { e: "bank loan", r: "банковский кредит" }, { e: "shareholder's equity", r: "собственный капитал акционеров" }, { e: "inventory", r: "запасы, инвентарь" }, { e: "invoice", r: "счёт-фактура, накладная" }, { e: "founders", r: "основатели" }, { e: "mortgage", r: "ипотека" }, { e: "deducting the costs", r: "вычитая затраты" }, { e: "income earned", r: "полученный доход" }
+              { e: "revenue", r: "доход, выручка" }, { e: "dividends", r: "дивиденды" }, { e: "retained profit", r: "нераспределённая прибыль" }, { e: "gross profit", r: "валовая прибыль" }, { e: "cost of goods sold", r: "себестоимость реализованных товаров" }, { e: "operating profit", r: "операционная прибыль" }, { e: "operating costs", r: "операционные расходы" }, { e: "net profit after tax", r: "чистая прибыль после уплаты налогов" }, { e: "depreciation", r: "амортизация, обесценивание" }, { e: "asset", r: "актив" }, { e: "liability", r: "обязательство, пассив" }, { e: "current assets", r: "оборотные активы" }, { e: "long-term assets", r: "долгосрочные активы" }, { e: "current liabilities", r: "краткосрочные обязательства" }, { e: "long-term liabilities", r: "долгосрочные обязательства" }, { e: "bank loan", r: "банковский кредит" }, { e: "shareholder's equity", r: "собственный капитал акционеров" }, { e: "inventory", r: "запасы, инвентарь" }, { e: "invoice", r: "счёт-фактура, накладная" }, { e: "founders", r: "основатели" }, { e: "mortgage", r: "ипотека" }, { e: "deducting the costs", r: "вычитая затраты" }, { e: "income earned", r: "полученный доход" },
+              { e: "fraud", r: "мошенничество" }, { e: "fraudster", r: "мошенник" }, { e: "legitimate", r: "законный, легитимный" }, { e: "payee", r: "получатель платежа" }, { e: "loss per case", r: "убыток на один случай" }, { e: "mandate", r: "мандат, полномочие" }, { e: "scam", r: "афера, мошенническая схема" }, { e: "scams", r: "мошеннические схемы" }, { e: "sole traders", r: "индивидуальные предприниматели" }, { e: "threat", r: "угроза" }, { e: "trade body", r: "торговая ассоциация" }, { e: "unaware of the risks", r: "не осознавая рисков" }, { e: "compared with", r: "по сравнению с" }
           ] },
-        { id: 3, name: "Marketing Mix", desc: "Маркетинг-микс (4P)", icon: "📣", colorAccent: "#ffd93d",
+        { id: 3, name: "Marketing Mix & Strategy", desc: "Маркетинг-микс + стратегии", icon: "📣", colorAccent: "#ffd93d",
           words: [
-              { e: "advertise", r: "рекламировать" }, { e: "affiliate", r: "филиал, отделение компании" }, { e: "appropriate", r: "соответствующий, подходящий" }, { e: "catchy phrase or slogan", r: "броская, «цепляющая» фраза или слоган" }, { e: "celebrity endorsements", r: "поддержка бренда знаменитостями" }, { e: "devise", r: "придумывать, разрабатывать" }, { e: "distribution expenses", r: "расходы на дистрибуцию" }, { e: "endorsement", r: "поддержка, одобрение" }, { e: "establish a price", r: "устанавливать цену" }, { e: "fulfill an absence", r: "заполнять пробел (отсутствие)" }, { e: "fulfill consumer demand", r: "удовлетворять требования / спрос покупателей" }, { e: "guerrilla marketing", r: "партизанский, малобюджетный маркетинг" }, { e: "key potential audience", r: "основная потенциальная аудитория" }, { e: "marketing costs", r: "расходы, затраты на маркетинг" }, { e: "marketing mix", r: "маркетинговый комплекс, маркетинг-микс" }, { e: "media exposure", r: "освещение в СМИ" }, { e: "on behalf of a company", r: "от имени компании" }, { e: "physical storefront", r: "физический магазин" }, { e: "product line", r: "линейка продуктов" }, { e: "profitability", r: "прибыльность" }, { e: "promote", r: "продвигать, стимулировать" }, { e: "reasonable alternative", r: "разумная альтернатива" }, { e: "substitute product", r: "продукт-заменитель" }, { e: "the Four Ps", r: "концепция «4 Р»" }, { e: "ultimately", r: "в конце концов, в конечном счёте" }, { e: "undertake", r: "предпринимать" }, { e: "unit cost price", r: "себестоимость единицы товара" }
+              { e: "advertise", r: "рекламировать" }, { e: "affiliate", r: "филиал, отделение компании" }, { e: "appropriate", r: "соответствующий, подходящий" }, { e: "catchy phrase or slogan", r: "броская, «цепляющая» фраза или слоган" }, { e: "celebrity endorsements", r: "поддержка бренда знаменитостями" }, { e: "devise", r: "придумывать, разрабатывать" }, { e: "distribution expenses", r: "расходы на дистрибуцию" }, { e: "endorsement", r: "поддержка, одобрение" }, { e: "establish a price", r: "устанавливать цену" }, { e: "fulfill an absence", r: "заполнять пробел (отсутствие)" }, { e: "fulfill consumer demand", r: "удовлетворять требования / спрос покупателей" }, { e: "guerrilla marketing", r: "партизанский, малобюджетный маркетинг" }, { e: "key potential audience", r: "основная потенциальная аудитория" }, { e: "marketing costs", r: "расходы, затраты на маркетинг" }, { e: "marketing mix", r: "маркетинговый комплекс, маркетинг-микс" }, { e: "media exposure", r: "освещение в СМИ" }, { e: "on behalf of a company", r: "от имени компании" }, { e: "physical storefront", r: "физический магазин" }, { e: "product line", r: "линейка продуктов" }, { e: "profitability", r: "прибыльность" }, { e: "promote", r: "продвигать, стимулировать" }, { e: "reasonable alternative", r: "разумная альтернатива" }, { e: "substitute product", r: "продукт-заменитель" }, { e: "the Four Ps", r: "концепция «4 Р»" }, { e: "undertake", r: "предпринимать" }, { e: "unit cost price", r: "себестоимость единицы товара" },
+              { e: "adjust", r: "корректировать" }, { e: "aircraft cockpits", r: "кабины самолётов" }, { e: "assess", r: "оценивать" }, { e: "calamity", r: "бедствие, кризис" }, { e: "calls to mind", r: "напоминает" }, { e: "come to grips", r: "справляться, совладать" }, { e: "conceived with", r: "разработанный с помощью" }, { e: "disruptors", r: "факторы, нарушающие рынок" }, { e: "core", r: "ядро, основа" }, { e: "daily driven", r: "ежедневно управляемый" }, { e: "exemplify", r: "служить примером" }, { e: "effective and decisive action", r: "эффективное и решительное действие" }, { e: "framework of marketing", r: "маркетинговая структура" }, { e: "meaningful checkpoints", r: "значимые контрольные точки" }, { e: "mitigating", r: "смягчение (рисков)" }, { e: "operating rooms", r: "операционные" }, { e: "pain points", r: "болевые точки" }, { e: "per se", r: "само по себе" }, { e: "remotely", r: "дистанционно" }, { e: "struggling", r: "испытывающий трудности" }, { e: "well-suited to help address", r: "хорошо подходит для решения" }, { e: "when severe and unexpected disruptions surface", r: "когда возникают серьёзные и неожиданные сбои" }, { e: "clipboards", r: "планшеты с зажимом" }, { e: "clues", r: "подсказки, улики" }, { e: "consumer behaviour", r: "поведение потребителей" }, { e: "deep underlying motives", r: "глубинные мотивы" }, { e: "exploit", r: "использовать (возможность)" }, { e: "glaring weakness", r: "очевидная слабость" }, { e: "inner", r: "внутренний" }, { e: "innermost urges", r: "сокровенные побуждения" }, { e: "pique", r: "вызывать интерес" }, { e: "scaled-up or down", r: "увеличенный или уменьшенный в масштабе" }, { e: "struggle (n)", r: "трудности, испытывать трудности" }, { e: "given (prep)", r: "на фоне, учитывая" }, { e: "despite", r: "несмотря на, невзирая, вопреки" }, { e: "nuances", r: "нюансы" }, { e: "B2B marketing strategy", r: "B2B маркетинговая стратегия" }, { e: "caches", r: "кэши, тайники" }
           ] },
-        { id: 4, name: "Social Media Marketing", desc: "SMM", icon: "📱", colorAccent: "#4d96ff",
+        { id: 4, name: "Social Media Marketing (SMM+)", desc: "SMM + Influencers", icon: "📱", colorAccent: "#4d96ff",
           words: [
-              { e: "adoption of engagement tool", r: "внедрение инструмента взаимодействия" }, { e: "appealing to", r: "обращение к" }, { e: "customer response rates", r: "доля ответов клиентов" }, { e: "demographic", r: "демографический" }, { e: "digital marketing and e-marketing", r: "цифровой и электронный маркетинг" }, { e: "draft plans", r: "разрабатывать планы" }, { e: "employ a broad range of tactics", r: "использовать широкий диапазон приёмов" }, { e: "enable", r: "позволять" }, { e: "engage with existing customers", r: "взаимодействовать с существующими клиентами" }, { e: "further their interests", r: "продвигать свои интересы" }, { e: "marketers", r: "маркетологи" }, { e: "metrics", r: "показатели" }, { e: "obstacle", r: "препятствие" }, { e: "pillar", r: "столп, основа" }, { e: "prospective customers", r: "потенциальные клиенты" }, { e: "purpose-built data analytics tools", r: "специально разработанные инструменты анализа данных" }, { e: "Return on Investment (ROI)", r: "окупаемость инвестиций" }, { e: "social media marketing (SMM)", r: "маркетинг в социальных сетях" }, { e: "stakeholders", r: "заинтересованные стороны" }, { e: "tailor their messages", r: "адаптировать свои сообщения" }, { e: "third-party reviewers", r: "сторонние обозреватели" }, { e: "track", r: "отслеживать" }, { e: "trade groups", r: "торговые группы" }, { e: "virality", r: "виральность" }, { e: "drive website traffic", r: "генерировать трафик на сайт" }, { e: "community of followers", r: "сообщество подписчиков" }, { e: "skilled and seasoned marketers", r: "опытные и квалифицированные маркетологи" }, { e: "gain insights", r: "получать аналитические данные" }
+              { e: "adoption of engagement tool", r: "внедрение инструмента взаимодействия" }, { e: "appealing to", r: "обращение к" }, { e: "customer response rates", r: "доля ответов клиентов" }, { e: "demographic", r: "демографический" }, { e: "digital marketing and e-marketing", r: "цифровой и электронный маркетинг" }, { e: "draft plans", r: "разрабатывать планы" }, { e: "employ a broad range of tactics", r: "использовать широкий диапазон приёмов" }, { e: "enable", r: "позволять" }, { e: "engage with existing customers", r: "взаимодействовать с существующими клиентами" }, { e: "further their interests", r: "продвигать свои интересы" }, { e: "marketers", r: "маркетологи" }, { e: "metrics", r: "показатели" }, { e: "obstacle", r: "препятствие" }, { e: "pillar", r: "столп, основа" }, { e: "prospective customers", r: "потенциальные клиенты" }, { e: "purpose-built data analytics tools", r: "специально разработанные инструменты анализа данных" }, { e: "Return on Investment (ROI)", r: "окупаемость инвестиций" }, { e: "social media marketing (SMM)", r: "маркетинг в социальных сетях" }, { e: "stakeholders", r: "заинтересованные стороны" }, { e: "tailor their messages", r: "адаптировать свои сообщения" }, { e: "third-party reviewers", r: "сторонние обозреватели" }, { e: "track", r: "отслеживать" }, { e: "trade groups", r: "торговые группы" }, { e: "virality", r: "виральность" }, { e: "drive website traffic", r: "генерировать трафик на сайт" }, { e: "community of followers", r: "сообщество подписчиков" }, { e: "skilled and seasoned marketers", r: "опытные и квалифицированные маркетологи" }, { e: "gain insights", r: "получать аналитические данные" },
+              { e: "adverts", r: "объявления, реклама" }, { e: "albeit", r: "хотя, даже если" }, { e: "billboards", r: "билборды" }, { e: "consumer spending", r: "потребительские расходы" }, { e: "halve", r: "уменьшать вдвое" }, { e: "key workers", r: "ключевые работники" }, { e: "National Health Service", r: "Национальная служба здравоохранения" }, { e: "obvious recession", r: "очевидная рецессия" }, { e: "stay in the consumer's mind", r: "оставаться в сознании потребителя" }, { e: "to follow practices", r: "следовать практикам" }, { e: "to reach wider audiences", r: "охватывать более широкую аудиторию" }, { e: "to create the brand exposure beyond the impact of", r: "создавать узнаваемость бренда за пределами влияния" }, { e: "marketing efforts", r: "маркетинговые усилия" }, { e: "an avenue for marketing", r: "канал для маркетинга" }, { e: "vulnerable", r: "уязвимый" }, { e: "to vent the frustrations with smth", r: "выплёскивать разочарование по поводу чего-л." }, { e: "durable", r: "долговечный" }, { e: "expand the product range", r: "расширить ассортимент продукции" }, { e: "furlough", r: "вынужденный отпуск" }, { e: "give jewellery making a go", r: "попробовать себя в изготовлении украшений" }, { e: "huge response", r: "огромный отклик" }, { e: "lump of clay", r: "комок глины" }, { e: "polymer clay", r: "полимерная глина" }, { e: "backlash", r: "негативная реакция" }, { e: "disgruntled", r: "недовольный" }, { e: "dropping a bomb", r: "обрушивать бомбу (шокирующая новость)" }, { e: "immediate threat", r: "немедленная угроза" }, { e: "inaccurate", r: "неточный" }, { e: "picked up the story", r: "подхватили историю" }, { e: "plunge rumours", r: "слухи о падении" }, { e: "command the highest fees", r: "назначать самые высокие гонорары" }, { e: "influencer", r: "инфлюенсер" }, { e: "word of mouth", r: "сарафанное радио" }, { e: "meteorically", r: "стремительно" }, { e: "micro-influencer", r: "микро-инфлюенсер" }, { e: "pay handsomely", r: "щедро платить" }, { e: "soar", r: "резко возрастать" }, { e: "soar amid", r: "резко расти на фоне" }, { e: "accountable", r: "подотчётный" }, { e: "back price stated", r: "указанная цена" }, { e: "chief executive", r: "исполнительный директор" }, { e: "circular and sustainable business model", r: "цикличная устойчивая бизнес-модель" }, { e: "enable brands", r: "позволять брендам" }, { e: "essentially", r: "по сути" }, { e: "founder", r: "основатель" }, { e: "garment", r: "предмет одежды" }, { e: "re-commerce", r: "перепродажа товаров" }, { e: "residual value", r: "остаточная стоимость" }, { e: "step up with", r: "активизироваться с" }, { e: "take a stake", r: "приобрести долю" }, { e: "accelerate", r: "ускорять" }, { e: "bandwagon", r: "популярное движение" }, { e: "event anchored by influencer", r: "мероприятие, организованное инфлюенсером" }, { e: "lockdown", r: "локдаун" }, { e: "short lip sync videos", r: "короткие видео под фонограмму" }, { e: "slice of festive spending", r: "доля праздничных расходов" }, { e: "tapping into", r: "использование (ресурса)" }, { e: "up sb's game", r: "повышать чей-то уровень" }
           ] },
         { id: 5, name: "E-Commerce", desc: "Электронная торговля", icon: "🛒", colorAccent: "#c77dff",
           words: [
@@ -135,214 +142,184 @@
         { id: 6, name: "Negotiations", desc: "Переговоры", icon: "🤝", colorAccent: "#ff9f7c",
           words: [
               { e: "acceptable", r: "приемлемый" }, { e: "assume", r: "полагать, считать" }, { e: "at stake", r: "на кону, поставлено на карту" }, { e: "avoid arguing", r: "избегать споров" }, { e: "bargaining table", r: "стол переговоров" }, { e: "be certain", r: "убеждаться, быть уверенными" }, { e: "budge", r: "двигаться (с позиций), уступать" }, { e: "claims", r: "претензии" }, { e: "commitment", r: "приверженность" }, { e: "compensation offer", r: "предложение о компенсации" }, { e: "compromise", r: "компромисс" }, { e: "concede", r: "уступить" }, { e: "concession", r: "уступка" }, { e: "counter-arguments", r: "контраргументы" }, { e: "evidence", r: "доказательство" }, { e: "firm and final", r: "жёсткий и окончательный" }, { e: "give in", r: "уступать" }, { e: "initial offer", r: "первоначальное предложение" }, { e: "intermediaries", r: "посредники" }, { e: "involved parties", r: "вовлечённые стороны" }, { e: "lack of communication", r: "недостаток коммуникации" }, { e: "lack of trust", r: "отсутствие доверия" }, { e: "legitimate", r: "законный" }, { e: "obstacles", r: "препятствия" }, { e: "outcomes", r: "результаты" }, { e: "persuade", r: "убеждать" }, { e: "point of view", r: "точка зрения" }, { e: "reduce debts", r: "уменьшить сумму долга" }, { e: "resolve", r: "решать" }, { e: "retirement benefits", r: "пенсионные выплаты" }, { e: "seek substitute outcome", r: "добиваться альтернативных результатов" }, { e: "sense of fear", r: "чувство страха" }, { e: "substantiate", r: "обосновывать" }, { e: "valid", r: "правомерный" }, { e: "vary", r: "различаться" }
+          ] },
+        // ================= НОВЫЙ ОБЯЗАТЕЛЬНЫЙ ЮНИТ 7 =================
+        { id: 7, name: "Essential Vocabulary (Обязательное)", desc: "Ключевые слова и фразы для экзамена и писем", icon: "⭐", colorAccent: "#ff9f7c",
+          words: [
+              { e: "contribution margin", r: "маржинальная прибыль" }, { e: "entail", r: "влечь за собой" }, { e: "enhance", r: "улучшать, повышать" }, { e: "capability", r: "способность" }, { e: "streamline focus", r: "оптимизировать фокус" }, { e: "regulators", r: "регулирующие органы" }, { e: "представить обновленную информацию", r: "provide an update" }, { e: "следить за новостями", r: "stay tuned / follow the news" }, { e: "undertake", r: "предпринимать" }, { e: "privacy focused", r: "ориентированный на конфиденциальность" }, { e: "to leverage", r: "использовать (преимущество)" }, { e: "brand loyalty", r: "лояльность к бренду" }, { e: "privacy-conscious consumers", r: "потребители, заботящиеся о конфиденциальности" }, { e: "выпуск нового продукта", r: "product launch" }, { e: "ROI (Return on Investment)", r: "окупаемость инвестиций" }, { e: "tailor messages", r: "адаптировать сообщения" }, { e: "прикрепленный файл", r: "attached file" }, { e: "полученные данные", r: "gathered insights / obtained data" }, { e: "просим ознакомиться", r: "please review" }, { e: "to disrupt", r: "нарушать (рынок)" }, { e: "seamlessly", r: "бесшовно" }, { e: "robust", r: "надёжный" }, { e: "предстоящая конференция", r: "upcoming conference" }, { e: "крайний срок подтверждения участия", r: "RSVP deadline" }, { e: "от всего сердца позвольте поблагодарить", r: "let me extend my heartfelt thanks" }, { e: "продолжим в том же духе", r: "let's continue this momentum" }, { e: "semi-conductors", r: "полупроводники" }, { e: "прошу следить за новостями", r: "please stay tuned for updates" }, { e: "high-profile celebrity", r: "высокопоставленная знаменитость" }, { e: "immersive", r: "иммерсивный" }, { e: "craftsmanship", r: "мастерство" }, { e: "reinforce", r: "укреплять" }, { e: "взаимовыгодные", r: "mutually beneficial" }, { e: "unveil", r: "представлять (новинку)" }, { e: "tech-savvy audience", r: "технически подкованная аудитория" }, { e: "ценить", r: "appreciate / value" }, { e: "потенциальное соглашение", r: "potential agreement" }, { e: "продолжу излагать основные моменты", r: "I will continue to outline the key points" }, { e: "embrace", r: "принимать (идею)" }, { e: "sophisticated", r: "сложный, изощрённый" }, { e: "to streamline", r: "оптимизировать" }, { e: "be outdone", r: "быть превзойдённым" }, { e: "с радостью подтверждаю", r: "I am delighted to confirm" }, { e: "concession", r: "уступка" }, { e: "budge", r: "уступать" }, { e: "письмо служит уведомлением", r: "this letter serves as notification" }, { e: "fluctuate", r: "колебаться" }, { e: "assurance", r: "уверенность, гарантия" }, { e: "substantiate", r: "обосновывать" }, { e: "рад сообщить", r: "I am pleased to announce" }, { e: "на этом мероприятии", r: "at this event" }, { e: "ценим ваше доверие", r: "we appreciate your trust" }, { e: "не стесняйтесь обращаться", r: "do not hesitate to reach out" }, { e: "celebrity endorsement", r: "поддержка знаменитости" }
           ] }
+    ];
+
+    // ================== ПОЛНЫЙ СПИСОК ПИСЕМ ДЛЯ ПЕРЕВОДА (с новой лексикой) ==================
+    const LETTERS_PRACTICE = [
+        { id: 1, title: "Letter 1: Introducing a New Initiative", ru: "Тема: Внедрение новой инициативы\n\nУважаемый г-н Райт,\nНадеюсь, это письмо застанет вас в хорошем расположении духа. В рамках нашего стремления создать позитивную и инклюзивную рабочую среду я рада сообщить о запуске нашей новой инициативы по корпоративной культуре «Вместе мы процветаем». Эта инициатива направлена на улучшение сотрудничества, поощрение разнообразия и поддержку благополучия сотрудников на всех уровнях. Благодарю вас за вашу постоянную преданность делу.\nС уважением,\nАнна Эммерсон", en_model: "Subject: Introducing a New Initiative\n\nDear Mr. Right,\nI hope this message finds you well. As part of our commitment to fostering a positive and inclusive workplace, I am excited to announce the launch of our new corporate culture initiative, 'Together We Thrive.' This initiative aims to enhance collaboration, promote diversity, and support employee wellbeing across all levels of our organization. Thank you for your continued dedication.\nBest regards,\nAnna Emmerson" },
+        { id: 2, title: "Letter 2: Recognizing Employees' Contributions", ru: "Тема: Признание вклада сотрудников\n\nУважаемый мистер Фирстбрук,\nЯ пишу, чтобы выразить искреннюю признательность за ваш выдающийся вклад в корпоративную культуру READsquared Ltd. Ваша приверженность командной работе и сотрудничеству не осталась незамеченной. Недавно я наблюдал, как вы способствовали успешному проведению командного совещания. Пожалуйста, продолжайте делиться своими идеями. Ещё раз благодарю вас за ваш упорный труд.\nС уважением,\nРуководитель", en_model: "Subject: Recognizing Employees' Contributions\n\nDear Mr. Firstbrook,\nI am writing to express my sincere appreciation for your outstanding contributions to our corporate culture at READsquared Ltd. Your commitment to teamwork and collaboration has not gone unnoticed. Recently, I observed how you facilitated a successful team meeting. Please continue to share your insights. Thank you once again for your hard work.\nBest regards,\nManager" },
+        { id: 3, title: "Letter 3: Addressing Concerns About Corporate Culture", ru: "Тема: Решение проблем, связанных с корпоративной культурой\n\nУважаемая миссис Селдон,\nЯ надеюсь, что это письмо застанет вас в хорошем расположении духа. Я хотел бы воспользоваться моментом, чтобы высказать некоторые опасения, которые были высказаны в отношении нашей корпоративной культуры. До моего сведения дошло, что некоторые сотрудники чувствуют себя оторванными друг от друга и недооценёнными в своих командах. В Sinomed Clinique Ltd. мы стремимся создать среду, в которой каждый чувствует себя вовлечённым и уважаемым. Я призываю вас и вашу команду поделиться любыми конкретными отзывами или предложениями. Открытое общение необходимо для роста и развития нашей организации. Чтобы облегчить этот процесс, в ближайшие недели мы организуем серию фокус-групп. Ваш вклад будет иметь решающее значение для определения областей, требующих улучшения. Спасибо вам за вашу приверженность созданию позитивной атмосферы. Я с нетерпением жду совместной работы.\nС уважением,\n...", en_model: "Subject: Addressing Concerns About Corporate Culture\n\nDear Mrs. Seldon,\nI hope this letter finds you well. I wanted to take a moment to address some concerns that have been raised regarding our corporate culture. It has come to my attention that some employees feel disconnected and undervalued within their teams. At Sinomed Clinique Ltd., we strive to create an environment where everyone feels included and respected. I encourage you and your team to share any specific feedback or suggestions. Open communication is essential for us to grow and evolve as an organization. To facilitate this process, we will be organizing a series of focus groups in the coming weeks. Your input will be crucial in helping us identify areas for improvement and implement meaningful changes. Thank you for your commitment to fostering a positive workplace. I look forward to working together.\nBest regards,\n..." },
+        { id: 4, title: "Letter 4: Announcing Training Programs", ru: "Тема: Анонс обучающих программ\n\nУважаемая Эмма,\nЯ рад сообщить, что мы запускаем серию обучающих программ, направленных на улучшение корпоративной культуры в WWF Group. Эти программы призваны дать сотрудникам навыки, необходимые для создания инклюзивной, инновационной и совместной рабочей среды. Первая сессия «Построение культуры уважения» состоится 11 февраля 2025 года. Я призываю вас активно участвовать и делиться этими возможностями со своими командами. Инвестиции в нашу корпоративную культуру имеют решающее значение для нашего долгосрочного успеха. Спасибо за вашу постоянную поддержку.\nС уважением,\nАлан Маккензи", en_model: "Subject: Announcing Training Programs\n\nDear Emma,\nI am pleased to announce that we will be launching a series of training programs focused on enhancing our corporate culture at WWF Group. These programs are designed to equip our employees with the skills needed to foster an inclusive, innovative, and collaborative work environment. The first session, 'Building a Culture of Respect,' will take place on February 11, 2025. I encourage you to participate actively and share these opportunities with your teams. Investing in our corporate culture is crucial for our long-term success. Thank you for your continued support.\nBest wishes,\nAlan Mackenzie" },
+        { id: 5, title: "Letter 5: Invitation to Charity Fundraising Event", ru: "Тема: Приглашение на благотворительное мероприятие\n\nУважаемый мистер Вигс,\nМы рады пригласить вас на наше благотворительное мероприятие 12 января 2026 года, которое состоится в отеле ASTORIA. Это мероприятие направлено на поддержку молодых предпринимателей, и ваше участие внесёт значительный вклад в наши усилия. Вечером вас ждут тихий аукцион, ужин и вдохновляющие истории бенефициаров. Пожалуйста, подтвердите участие до 10 декабря 2025 года. Спасибо, что рассматриваете эту возможность.\nС теплыми пожеланиями,\n...", en_model: "Subject: Invitation to Charity Fundraising Event\n\nDear Mr. Wigs,\nWe are thrilled to invite you to our Charity Fundraising Event on January 12, 2026, taking place at the hotel ASTORIA. This event aims to support young entrepreneurs, and your participation would significantly contribute to our efforts. The evening will feature a silent auction, dinner, and inspiring stories from beneficiaries. Please RSVP by December 10, 2025. Thank you for considering this opportunity.\nWarmest regards,\n..." },
+        // НОВЫЕ ПИСЬМА С ОБЯЗАТЕЛЬНОЙ ЛЕКСИКОЙ
+        { id: 6, title: "Letter 6: Product Launch & Leveraging Brand Loyalty", ru: "Тема: Выпуск нового продукта и использование лояльности к бренду\n\nУважаемая команда,\nЯ рад сообщить о предстоящем выпуске нового продукта. Мы стремимся представить инновационное устройство, которое бесшовно интегрируется в повседневную жизнь. Прикрепленный файл содержит полученные данные и анализ ROI. Просим ознакомиться с деталями. Мы также планируем использовать поддержку высокопоставленной знаменитости, чтобы укрепить лояльность к бренду среди потребителей, заботящихся о конфиденциальности. Крайний срок подтверждения участия в мероприятии — 10 мая. От всего сердца позвольте поблагодарить вас за усилия. Продолжим в том же духе!\nС уважением,\nДиректор", en_model: "Subject: Product Launch & Leveraging Brand Loyalty\n\nDear Team,\nI am pleased to announce the upcoming product launch. We aim to unveil an innovative device that integrates seamlessly into daily life. The attached file contains gathered insights and ROI analysis. Please review the details. We also plan to leverage a high-profile celebrity endorsement to reinforce brand loyalty among privacy-conscious consumers. The RSVP deadline for the event is May 10. Let me extend my heartfelt thanks for your efforts. Let's continue this momentum!\nBest regards,\nDirector" },
+        { id: 7, title: "Letter 7: Negotiation Follow-up & Mutual Concessions", ru: "Тема: Продолжение переговоров и взаимные уступки\n\nУважаемый г-н Кул,\nБлагодарю за встречу 15 февраля. Я продолжу излагать основные моменты нашего потенциального соглашения. Мы ценим ваше доверие и готовы предпринять необходимые шаги. Хотя некоторые условия могут колебаться, мы надеемся на надёжные гарантии. Пожалуйста, не стесняйтесь обращаться, если потребуется обосновать наши предложения. С радостью подтверждаю, что мы готовы к разумным уступкам, но не будем уступать по ключевым позициям. Письмо служит уведомлением о нашем стремлении к взаимовыгодному партнёрству.\nС уважением,\n...", en_model: "Subject: Negotiation Follow-up & Mutual Concessions\n\nDear Mr. Cool,\nThank you for the meeting on February 15. I will continue to outline the key points of our potential agreement. We appreciate your trust and are ready to undertake necessary steps. Although some terms may fluctuate, we rely on robust assurance. Please do not hesitate to reach out if you need to substantiate our proposals. I am delighted to confirm that we are open to reasonable concessions but will not budge on core issues. This letter serves as notification of our commitment to a mutually beneficial partnership.\nBest regards,\n..." }
+    ];
+
+    const LETTER_PHRASES = [
+        { e: "I hope this message finds you well", r: "Надеюсь, это сообщение застанет вас в хорошем расположении духа" },
+        { e: "I am writing to express my sincere appreciation", r: "Я пишу, чтобы выразить искреннюю признательность" },
+        { e: "I am pleased to announce", r: "Я рад сообщить" },
+        { e: "Thank you for your dedication", r: "Благодарю за вашу преданность делу" },
+        { e: "Please review the attached document", r: "Пожалуйста, ознакомьтесь с прилагаемым документом" },
+        { e: "We look forward to discussing this further", r: "С нетерпением ждём дальнейшего обсуждения" },
+        { e: "I am writing to follow up on", r: "Я пишу, чтобы уточнить информацию по" },
+        { e: "Your input will be crucial", r: "Ваш вклад будет иметь решающее значение" },
+        { e: "Let's continue this momentum", r: "Продолжим в том же духе" },
+        { e: "Please do not hesitate to reach out", r: "Пожалуйста, не стесняйтесь обращаться" },
+        { e: "We are thrilled to invite you", r: "Мы рады пригласить вас" },
+        { e: "I wanted to provide an update", r: "Я хотел бы предоставить обновлённую информацию" },
+        { e: "outline the next steps", r: "наметить дальнейшие шаги" },
+        { e: "ensure we maximize our outreach", r: "обеспечить максимальный охват аудитории" },
+        { e: "key metrics and insights", r: "ключевые показатели и аналитические материалы" },
+        { e: "overcome these obstacles", r: "преодолеть препятствия" },
+        { e: "product launch", r: "выпуск нового продукта" },
+        { e: "attached file", r: "прикрепленный файл" },
+        { e: "gathered insights", r: "полученные данные" },
+        { e: "please review", r: "просим ознакомиться" },
+        { e: "upcoming conference", r: "предстоящая конференция" },
+        { e: "RSVP deadline", r: "крайний срок подтверждения участия" },
+        { e: "let me extend my heartfelt thanks", r: "от всего сердца позвольте поблагодарить" },
+        { e: "stay tuned", r: "следите за новостями" },
+        { e: "mutually beneficial", r: "взаимовыгодные" },
+        { e: "I will continue to outline the key points", r: "продолжу излагать основные моменты" },
+        { e: "I am delighted to confirm", r: "с радостью подтверждаю" },
+        { e: "we appreciate your trust", r: "ценим ваше доверие" },
+        { e: "this letter serves as notification", r: "письмо служит уведомлением" },
+        { e: "fluctuate", r: "колебаться" },
+        { e: "assurance", r: "уверенность, гарантия" },
+        { e: "substantiate", r: "обосновывать" },
+        { e: "embrace", r: "принимать" },
+        { e: "concession", r: "уступка" },
+        { e: "budge", r: "уступать" },
+        { e: "streamline", r: "оптимизировать" },
+        { e: "be outdone", r: "быть превзойдённым" },
+        { e: "high-profile celebrity", r: "высокопоставленная знаменитость" },
+        { e: "celebrity endorsement", r: "поддержка знаменитости" },
+        { e: "immersive", r: "иммерсивный" },
+        { e: "tech-savvy", r: "технически подкованный" },
+        { e: "unveil", r: "представлять" },
+        { e: "privacy-conscious consumers", r: "потребители, заботящиеся о конфиденциальности" },
+        { e: "brand loyalty", r: "лояльность к бренду" },
+        { e: "to leverage", r: "использовать" },
+        { e: "craftsmanship", r: "мастерство" },
+        { e: "entail", r: "влечь за собой" },
+        { e: "privacy focused", r: "ориентированный на конфиденциальность" },
+        { e: "reinforce", r: "укреплять" },
+        { e: "undertake", r: "предпринимать" },
+        { e: "disrupt", r: "нарушать" },
+        { e: "seamlessly", r: "бесшовно" },
+        { e: "robust", r: "надёжный" },
+        { e: "semi-conductors", r: "полупроводники" }
     ];
 
     // Глобальное состояние
     let globalScore = 0;
     let learnedWords = new Set();
     let unlockedBadges = new Set();
-    let appState = { screen: "home", lessonId: 0 };
+    let appState = { screen: "home", lessonId: 0, lettersSub: "practice" };
     
-    // Игровые состояния
     let flashDeck = [], flashIdx = 0, flashFlip = false;
     let quizCurrent = null, quizHearts = 5, quizScore = 0, quizTotal = 0, quizDirection = "en", quizDone = false;
     let matchWords = [], matchSelections = { en: null, ru: null }, matchMatched = new Set(), matchWrongFlag = false;
     let tfCurrent = null;
     let typingCurrent = null, typingFeedback = "", typingAnswered = false, typingDirection = "en2ru";
-
-    // Награды (уникальные, без дублей)
-    const ACHIEVEMENTS = [
-        { id: "star", name: "⭐ Звёздочка", threshold: 50, icon: "⭐" },
-        { id: "cake", name: "🎂 Тортик", threshold: 150, icon: "🍰" },
-        { id: "smile", name: "😊 Смайлик", threshold: 300, icon: "😁" },
-        { id: "crown", name: "👑 Корона", threshold: 500, icon: "👑" },
-        { id: "diamond", name: "💎 Алмаз", threshold: 800, icon: "💎" }
-    ];
-
-    function getWordsForGame(lid, excludeLearned = true) {
-        let words = (lid === 0) ? LESSONS_DATA.flatMap(l => l.words.map(w => ({...w, lid: l.id, lname: l.name, accent: l.colorAccent}))) : (LESSONS_DATA.find(l=>l.id===lid)?.words.map(w => ({...w, lid, lname: LESSONS_DATA.find(l=>l.id===lid).name, accent: LESSONS_DATA.find(l=>l.id===lid).colorAccent})) || []);
-        if(excludeLearned) return words.filter(w => !learnedWords.has(w.e));
-        return words;
-    }
+    let letterPhraseMatch = [], letterMatchSelections = { en: null, ru: null }, letterMatchMatched = new Set(), letterMatchWrongFlag = false;
+    let letterQuizPhrases = [], letterQuizCurrent = null, letterQuizScore = 0, letterQuizTotal = 0;
 
     function saveProgress() { localStorage.setItem("bs_score", globalScore); localStorage.setItem("bs_learned", JSON.stringify([...learnedWords])); localStorage.setItem("bs_badges", JSON.stringify([...unlockedBadges])); }
     function loadProgress() { let s = localStorage.getItem("bs_score"); if(s) globalScore = parseInt(s); let l = localStorage.getItem("bs_learned"); if(l) { try { learnedWords = new Set(JSON.parse(l)); } catch(e) {} } let b = localStorage.getItem("bs_badges"); if(b) { try { unlockedBadges = new Set(JSON.parse(b)); } catch(e) {} } checkAndUnlockBadges(); }
-    
-    function showRewardAnimation(achievement) {
-        return new Promise((resolve) => {
-            let overlay = document.createElement('div');
-            overlay.className = 'reward-overlay';
-            overlay.innerHTML = `
-                <div class="reward-card">
-                    <div class="reward-icon">${achievement.icon}</div>
-                    <div class="reward-title">Поздравляю! 🎉</div>
-                    <div class="reward-message">Вы получили награду: ${achievement.name}</div>
-                    <div class="reward-heart">❤️ +50 очков к успеху!</div>
-                </div>
-            `;
-            document.body.appendChild(overlay);
-            setTimeout(() => {
-                overlay.remove();
-                resolve();
-            }, 2500);
-        });
+    function showRewardAnimation(achievement) { return new Promise((resolve) => { let overlay = document.createElement('div'); overlay.className = 'reward-overlay'; overlay.innerHTML = `<div class="reward-card"><div class="reward-icon">${achievement.icon}</div><div class="reward-title">Поздравляю! 🎉</div><div class="reward-message">Вы получили награду: ${achievement.name}</div><div class="reward-heart">❤️ +50 очков к успеху!</div></div>`; document.body.appendChild(overlay); setTimeout(() => { overlay.remove(); resolve(); }, 2500); }); }
+    // НОВЫЕ ПОРОГИ НАГРАД: от 100 до 1 000 000
+    async function checkAndUnlockBadges() { 
+        const ACHIEVEMENTS = [
+            { id: "star", name: "⭐ Звёздочка", threshold: 100, icon: "⭐" },
+            { id: "cake", name: "🎂 Тортик", threshold: 1000, icon: "🍰" },
+            { id: "smile", name: "😊 Смайлик", threshold: 10000, icon: "😁" },
+            { id: "crown", name: "👑 Корона", threshold: 100000, icon: "👑" },
+            { id: "diamond", name: "💎 Алмаз", threshold: 500000, icon: "💎" },
+            { id: "platinum", name: "💎 Платина", threshold: 1000000, icon: "🏆" }
+        ];
+        for (let a of ACHIEVEMENTS) { 
+            if (globalScore >= a.threshold && !unlockedBadges.has(a.id)) { 
+                unlockedBadges.add(a.id); 
+                saveProgress(); 
+                await showRewardAnimation(a); 
+                render(); 
+            } 
+        } 
     }
-    
-    async function checkAndUnlockBadges() {
-        let newUnlock = false;
-        for (let a of ACHIEVEMENTS) {
-            if (globalScore >= a.threshold && !unlockedBadges.has(a.id)) {
-                unlockedBadges.add(a.id);
-                newUnlock = true;
-                saveProgress();
-                await showRewardAnimation(a);
-                render();
-            }
-        }
-        if (newUnlock) saveProgress();
-    }
-    
     function addPoints(amt) { globalScore += amt; if(globalScore<0) globalScore=0; saveProgress(); checkAndUnlockBadges(); render(); }
     function markWord(en) { if(!learnedWords.has(en)) { learnedWords.add(en); addPoints(5); showFloatingMessage(`📖 +5 очков! Слово выучено`, 1500); render(); } }
     function unmarkWord(en) { if(learnedWords.has(en)) { learnedWords.delete(en); addPoints(-3); showFloatingMessage(`📖 Слово снято с изучения`, 1500); render(); } }
     function showFloatingMessage(msg, duration) { let div = document.createElement('div'); div.className = 'floating-toast'; div.innerText = msg; document.body.appendChild(div); setTimeout(() => div.remove(), duration); }
     function animateElement(el, type) { if(!el) return; el.classList.add(type === 'correct' ? 'animate-correct' : 'animate-wrong'); setTimeout(() => el.classList.remove(type === 'correct' ? 'animate-correct' : 'animate-wrong'), 400); }
-    function speakText(text) { let utterance = new SpeechSynthesisUtterance(text); utterance.lang = 'en-US'; utterance.rate = 0.85; window.speechSynthesis.cancel(); window.speechSynthesis.speak(utterance); }
+    function speakText(text) { let utterance = new SpeechSynthesisUtterance(text); utterance.lang = 'en-US'; window.speechSynthesis.cancel(); window.speechSynthesis.speak(utterance); }
     function shuffle(arr) { for(let i=arr.length-1;i>0;i--) { let j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; } return arr; }
 
+    function getWordsForGame(lid, excludeLearned = true) { let words = (lid === 0) ? LESSONS_DATA.flatMap(l => l.words.map(w => ({...w, lid: l.id}))) : (LESSONS_DATA.find(l=>l.id===lid)?.words.map(w => ({...w, lid})) || []); if(excludeLearned) return words.filter(w => !learnedWords.has(w.e)); return words; }
     function initFlash(lid) { let words = getWordsForGame(lid, true); flashDeck = shuffle([...words]); flashIdx=0; flashFlip=false; }
     function initQuiz(lid) { quizHearts=5; quizScore=0; quizTotal=0; quizDone=false; generateQuiz(lid); }
     function generateQuiz(lid) { let words=getWordsForGame(lid, true); if(words.length<2) { quizCurrent=null; return; } let correct=words[Math.floor(Math.random()*words.length)]; let others=shuffle(words.filter(w=>w.e!==correct.e)).slice(0,3); let options=shuffle([correct,...others]); quizCurrent={correct,options,answered:false,selectedIdx:-1}; }
     function initMatch(lid) { let words = getWordsForGame(lid, true); matchWords = shuffle(words).slice(0,6); matchSelections = { en: null, ru: null }; matchMatched.clear(); matchWrongFlag = false; }
     function initTF(lid) { let words=getWordsForGame(lid, true); if(words.length) { let w=words[Math.floor(Math.random()*words.length)]; let isTrue=Math.random()>0.45; let wrong=words.filter(ww=>ww.e!==w.e)[0]?.r||"неверно"; tfCurrent={en:w.e, ru:isTrue?w.r:wrong, correctFlag:isTrue, answered:false}; } }
     function initTyping(lid) { let words=getWordsForGame(lid, true); if(words.length) typingCurrent=words[Math.floor(Math.random()*words.length)]; typingAnswered=false; typingFeedback=""; }
+    function initLetterMatch() { let shuffled = shuffle([...LETTER_PHRASES]); letterPhraseMatch = shuffled.slice(0,6); letterMatchMatched.clear(); letterMatchSelections = { en: null, ru: null }; letterMatchWrongFlag = false; }
+    function initLetterQuiz() { letterQuizPhrases = shuffle([...LETTER_PHRASES]).slice(0,6); letterQuizScore = 0; letterQuizTotal = 0; generateLetterQuiz(); }
+    function generateLetterQuiz() { if(letterQuizPhrases.length === 0) return; let correct = letterQuizPhrases[Math.floor(Math.random()*letterQuizPhrases.length)]; let others = shuffle(letterQuizPhrases.filter(p=>p.e !== correct.e)).slice(0,3); let options = shuffle([correct, ...others]); letterQuizCurrent = { correct, options, answered: false, selectedIdx: -1 }; }
 
-    // ========== РЕНДЕРЫ ==========
-    function renderHome() {
-        let total = LESSONS_DATA.reduce((s,l)=>s+l.words.length,0);
-        let learnedCount = learnedWords.size;
-        return `<div class="global-header"><div class="logo-area"><h1>📘 Business English Pro</h1><p>Unit 2 · Marketing — полный словарь из 4.docx</p></div>
-        <div class="score-panel"><div><div class="score-label">⭐ ОЧКИ</div><div class="score-value">${globalScore}</div></div><button class="reset-progress" id="resetBtn">⟳ Сброс</button></div></div>
-        <div style="background:var(--card); border-radius:28px; padding:16px; margin-bottom:20px;">📖 Выучено: ${learnedCount}/${total} (${Math.round(learnedCount/total*100)}%)</div>
-        <div class="lesson-grid">${LESSONS_DATA.map(l=>{ let lc=getWordsForGame(l.id, false).filter(w=>learnedWords.has(w.e)).length; let pct=Math.round(lc/l.words.length*100); return `<div class="lcard" onclick="goToLesson(${l.id})"><div class="lcard-head"><div style="font-size:32px">${l.icon}</div><div style="font-weight:800;color:${l.colorAccent}">${l.name}</div><div class="lcard-prog"><div class="lcard-pfill" style="width:${pct}%;background:${l.colorAccent}"></div></div></div><div class="lcard-body"><div>${lc}/${l.words.length}</div><button style="background:${l.colorAccent}; border:none; border-radius:40px; padding:6px; width:100%;">Открыть →</button></div></div>`; }).join('')}</div>
-        <div class="game-grid-premium"><div class="game-card-premium" onclick="startGlobal('flash')"><div class="game-icon">🃏</div><div class="game-title">Flashcards</div></div>
-        <div class="game-card-premium" onclick="startGlobal('quiz')"><div class="game-icon">🎯</div><div class="game-title">Quiz</div></div>
-        <div class="game-card-premium" onclick="startGlobal('match')"><div class="game-icon">🔗</div><div class="game-title">Match</div></div>
-        <div class="game-card-premium" onclick="startGlobal('tf')"><div class="game-icon">✓✗</div><div class="game-title">True/False</div></div>
-        <div class="game-card-premium" onclick="startGlobal('typing')"><div class="game-icon">⌨️</div><div class="game-title">Typing</div></div></div>
-        <div class="full-content-section"><h2>🏆 НАГРАДЫ</h2><div class="badge-single">${ACHIEVEMENTS.map(a => `<div class="badge-card ${unlockedBadges.has(a.id) ? 'unlocked' : 'locked'}"><div class="badge-icon">${a.icon}</div><div class="badge-name">${a.name}</div><div style="font-size:0.7rem;margin-top:4px">${a.threshold} очков</div></div>`).join('')}</div></div>
-        <div class="full-content-section"><h2>📚 ПОЛНОЕ СОДЕРЖАНИЕ КУРСА</h2>${LESSONS_DATA.map(l => `<div class="content-accordion"><div class="accordion-header" onclick="toggleAccordion(this)">📘 ${l.name} (${l.words.length} терминов) ▼</div><div class="accordion-content"><div class="words-grid-inline">${l.words.map(w => `<div class="word-bubble"><strong>${w.e}</strong><span>${w.r}</span></div>`).join('')}</div></div></div>`).join('')}</div>`;
+    function renderHome() { 
+        let total = LESSONS_DATA.reduce((s,l)=>s+l.words.length,0); 
+        let learnedCount = learnedWords.size; 
+        // Массив наград для отображения (синхронизирован с порогами)
+        const ACHIEVEMENTS_DISPLAY = [
+            { id: "star", name: "⭐ Звёздочка", threshold: 100, icon: "⭐" },
+            { id: "cake", name: "🎂 Тортик", threshold: 1000, icon: "🍰" },
+            { id: "smile", name: "😊 Смайлик", threshold: 10000, icon: "😁" },
+            { id: "crown", name: "👑 Корона", threshold: 100000, icon: "👑" },
+            { id: "diamond", name: "💎 Алмаз", threshold: 500000, icon: "💎" },
+            { id: "platinum", name: "🏆 Платина", threshold: 1000000, icon: "🏆" }
+        ];
+        return `<div class="global-header"><div class="logo-area"><h1>📘 Business English Pro</h1><p>Unit 2 · Marketing + Перевод писем (полный словарь + обязательный юнит 7)</p></div><div class="score-panel"><div><div class="score-label">⭐ ОЧКИ</div><div class="score-value">${globalScore}</div></div><button class="reset-progress" id="resetBtn">⟳ Сброс</button></div></div><div style="background:var(--card); border-radius:28px; padding:16px; margin-bottom:20px;">📖 Выучено: ${learnedCount}/${total} (${Math.round(learnedCount/total*100)}%)</div><div class="lesson-grid">${LESSONS_DATA.map(l=>{ let lc=getWordsForGame(l.id, false).filter(w=>learnedWords.has(w.e)).length; let pct=Math.round(lc/l.words.length*100); return `<div class="lcard" onclick="goToLesson(${l.id})"><div class="lcard-head"><div style="font-size:32px">${l.icon}</div><div style="font-weight:800;color:${l.colorAccent}">${l.name}</div><div class="lcard-prog"><div class="lcard-pfill" style="width:${pct}%;background:${l.colorAccent}"></div></div></div><div class="lcard-body"><div>${lc}/${l.words.length}</div><button style="background:${l.colorAccent}; border:none; border-radius:40px; padding:6px; width:100%;">Открыть →</button></div></div>`; }).join('')}</div><div class="game-grid-premium"><div class="game-card-premium" onclick="startGlobal('flash')"><div class="game-icon">🃏</div><div class="game-title">Flashcards</div></div><div class="game-card-premium" onclick="startGlobal('quiz')"><div class="game-icon">🎯</div><div class="game-title">Quiz</div></div><div class="game-card-premium" onclick="startGlobal('match')"><div class="game-icon">🔗</div><div class="game-title">Match</div></div><div class="game-card-premium" onclick="startGlobal('tf')"><div class="game-icon">✓✗</div><div class="game-title">True/False</div></div><div class="game-card-premium" onclick="startGlobal('typing')"><div class="game-icon">⌨️</div><div class="game-title">Typing</div></div><div class="game-card-premium" onclick="goToLetters()"><div class="game-icon">✉️</div><div class="game-title">Письма (перевод)</div></div></div><div class="full-content-section"><h2>🏆 НАГРАДЫ</h2><div class="badge-single">${ACHIEVEMENTS_DISPLAY.map(a => `<div class="badge-card ${unlockedBadges.has(a.id) ? 'unlocked' : 'locked'}"><div class="badge-icon">${a.icon}</div><div class="badge-name">${a.name}</div><div style="font-size:0.7rem;margin-top:4px">${a.threshold} очков</div></div>`).join('')}</div></div><div class="full-content-section"><h2>📚 ПОЛНОЕ СОДЕРЖАНИЕ КУРСА (все слова из файла + обязательный юнит)</h2>${LESSONS_DATA.map(l => `<div class="content-accordion"><div class="accordion-header" onclick="toggleAccordion(this)">📘 ${l.name} (${l.words.length} терминов) ▼</div><div class="accordion-content"><div class="words-grid-inline">${l.words.map(w => `<div class="word-bubble"><strong>${w.e}</strong><span>${w.r}</span></div>`).join('')}</div></div></div>`).join('')}</div>`; 
     }
-    
-    function renderLessonMenu(lid) {
-        let lesson = LESSONS_DATA.find(l=>l.id===lid);
-        let words = getWordsForGame(lid, false);
-        let knownCount = words.filter(w=>learnedWords.has(w.e)).length;
-        return `<button class="home-btn" onclick="goHome()">🏠 Домой</button>
-        <div style="background:${lesson.colorAccent}20; border-radius:32px; padding:20px; margin-bottom:20px;"><div style="font-size:2rem">${lesson.icon}</div><div style="font-weight:800;color:${lesson.colorAccent}">${lesson.name}</div><div class="lcard-prog"><div class="lcard-pfill" style="width:${Math.round(knownCount/lesson.words.length*100)}%;background:${lesson.colorAccent}"></div></div><div>${knownCount}/${lesson.words.length} слов</div></div>
-        <div class="game-grid-premium"><div class="game-card-premium" onclick="startGame('dict',${lid})"><div class="game-icon">📖</div><div class="game-title">Словарь</div></div>
-        <div class="game-card-premium" onclick="startGame('flash',${lid})"><div class="game-icon">🃏</div><div class="game-title">Флеш</div></div>
-        <div class="game-card-premium" onclick="startGame('quiz',${lid})"><div class="game-icon">🎯</div><div class="game-title">Тест</div></div>
-        <div class="game-card-premium" onclick="startGame('match',${lid})"><div class="game-icon">🔗</div><div class="game-title">Матч</div></div>
-        <div class="game-card-premium" onclick="startGame('tf',${lid})"><div class="game-icon">✓✗</div><div class="game-title">Верно/Ложь</div></div>
-        <div class="game-card-premium" onclick="startGame('typing',${lid})"><div class="game-icon">⌨️</div><div class="game-title">Напиши</div></div></div>`;
-    }
-    
-    function renderDictionary(lid) {
-        let words = getWordsForGame(lid, false);
-        return `<button class="home-btn" onclick="goHome()">🏠 Домой</button>
-        <div style="display:flex;gap:12px;margin-bottom:16px;"><div style="background:var(--card);padding:12px;border-radius:20px;flex:1;text-align:center"><div class="score-value">${words.length}</div><div>всего</div></div><div style="background:var(--card);padding:12px;border-radius:20px;flex:1;text-align:center"><div class="score-value" style="color:var(--accent3)">${words.filter(w=>learnedWords.has(w.e)).length}</div><div>выучено</div></div></div>
-        <input class="search" id="dictSearch" placeholder="🔍 Поиск..." onkeyup="filterDict()">
-        <div class="dict-grid" id="dictGrid">${words.map(w=>`<div class="wcard"><div class="wci"><div class="wen">${w.e}</div><div class="wru">${w.r}</div></div><div class="word-actions"><button class="speaker-btn" onclick="speakText('${w.e.replace(/'/g,"\\'")}')">🔊</button><button class="wlbtn ${learnedWords.has(w.e)?'ok':''}" onclick="toggleWord('${w.e.replace(/'/g,"\\'")}',${lid})">${learnedWords.has(w.e)?'Выучено ✓':'Отметить'}</button></div></div>`).join('')}</div>`;
-    }
-    
+    function renderLessonMenu(lid) { let lesson = LESSONS_DATA.find(l=>l.id===lid); let words = getWordsForGame(lid, false); let knownCount = words.filter(w=>learnedWords.has(w.e)).length; return `<button class="home-btn" onclick="goHome()">🏠 Домой</button><div style="background:${lesson.colorAccent}20; border-radius:32px; padding:20px; margin-bottom:20px;"><div style="font-size:2rem">${lesson.icon}</div><div style="font-weight:800;color:${lesson.colorAccent}">${lesson.name}</div><div class="lcard-prog"><div class="lcard-pfill" style="width:${Math.round(knownCount/lesson.words.length*100)}%;background:${lesson.colorAccent}"></div></div><div>${knownCount}/${lesson.words.length} слов</div></div><div class="game-grid-premium"><div class="game-card-premium" onclick="startGame('dict',${lid})"><div class="game-icon">📖</div><div class="game-title">Словарь</div></div><div class="game-card-premium" onclick="startGame('flash',${lid})"><div class="game-icon">🃏</div><div class="game-title">Флеш</div></div><div class="game-card-premium" onclick="startGame('quiz',${lid})"><div class="game-icon">🎯</div><div class="game-title">Тест</div></div><div class="game-card-premium" onclick="startGame('match',${lid})"><div class="game-icon">🔗</div><div class="game-title">Матч</div></div><div class="game-card-premium" onclick="startGame('tf',${lid})"><div class="game-icon">✓✗</div><div class="game-title">Верно/Ложь</div></div><div class="game-card-premium" onclick="startGame('typing',${lid})"><div class="game-icon">⌨️</div><div class="game-title">Напиши</div></div></div>`; }
+    function renderDictionary(lid) { let words = getWordsForGame(lid, false); return `<button class="home-btn" onclick="goHome()">🏠 Домой</button><div style="display:flex;gap:12px;margin-bottom:16px;"><div style="background:var(--card);padding:12px;border-radius:20px;flex:1;text-align:center"><div class="score-value">${words.length}</div><div>всего</div></div><div style="background:var(--card);padding:12px;border-radius:20px;flex:1;text-align:center"><div class="score-value" style="color:var(--accent3)">${words.filter(w=>learnedWords.has(w.e)).length}</div><div>выучено</div></div></div><input class="search" id="dictSearch" placeholder="🔍 Поиск..." onkeyup="filterDict()"><div class="dict-grid" id="dictGrid">${words.map(w=>`<div class="wcard"><div class="wci"><div class="wen">${w.e}</div><div class="wru">${w.r}</div></div><div class="word-actions"><button class="speaker-btn" onclick="speakText('${w.e.replace(/'/g,"\\'")}')">🔊</button><button class="wlbtn ${learnedWords.has(w.e)?'ok':''}" onclick="toggleWord('${w.e.replace(/'/g,"\\'")}',${lid})">${learnedWords.has(w.e)?'Выучено ✓':'Отметить'}</button></div></div>`).join('')}</div>`; }
     function renderFlash(lid) { if(!flashDeck.length) initFlash(lid); if(flashDeck.length===0) return `<button class="home-btn" onclick="goHome()">🏠 Домой</button><div class="game-container"><div style="text-align:center"><div>🏆 Все слова выучены!</div></div></div>`; let w=flashDeck[flashIdx]; return `<button class="home-btn" onclick="goHome()">🏠 Домой</button><div class="game-container"><div class="big-card" onclick="flashFlip=!flashFlip;render()"><div class="flash-word">${flashFlip? w.r : w.e}</div><div style="margin-top:12px;color:var(--muted)">👆 нажми для перевода</div></div><div style="display:flex;gap:16px;justify-content:center"><button class="fbtn fb-no" onclick="nextFlash(false,${lid})">✗ Пропустить</button><button class="fbtn fb-ok" onclick="nextFlash(true,${lid})">✓ Знаю (+3)</button></div><div style="text-align:center;margin-top:16px">${flashIdx+1}/${flashDeck.length}</div></div>`; }
     function nextFlash(know,lid) { if(know && flashDeck[flashIdx]) { markWord(flashDeck[flashIdx].e); showFloatingMessage("✅ +3 очка!", 1000); } flashIdx++; flashFlip=false; if(flashIdx>=flashDeck.length && flashDeck.length>0) addPoints(10); render(); }
-    
     function renderQuiz(lid) { if(!quizCurrent) initQuiz(lid); if(!quizCurrent) return `<button class="home-btn" onclick="goHome()">🏠 Домой</button><div class="game-container"><div>Нет слов для теста</div></div>`; if(quizHearts<=0) return `<button class="home-btn" onclick="goHome()">🏠 Домой</button><div class="game-container"><div>💀 Тест окончен. Счёт: ${quizScore}/${quizTotal}</div><button class="back-btn" onclick="initQuiz(${lid});render()">Заново</button></div>`; let q=quizCurrent; return `<button class="home-btn" onclick="goHome()">🏠 Домой</button><div class="game-container"><div style="display:flex;justify-content:space-between"><span>❤️ ${'❤️'.repeat(quizHearts)}</span><span>${quizScore}/${quizTotal}</span></div><div class="direction-toggle"><button class="dir-btn ${quizDirection==='en'?'active':''}" onclick="quizDirection='en';initQuiz(${lid});render()">🇬🇧→Рус</button><button class="dir-btn ${quizDirection==='ru'?'active':''}" onclick="quizDirection='ru';initQuiz(${lid});render()">🇷🇺→Eng</button></div><div class="big-card"><div class="flash-word" style="font-size:1.6rem">${quizDirection==='en'?q.correct.e:q.correct.r}</div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">${q.options.map((opt,i)=>`<div class="quiz-option-card ${q.answered?(opt.e===q.correct.e?'qcor':(q.selectedIdx===i?'qwrg':'')):''}" onclick="${q.answered?'':`answerQuizWrap(${i},${lid})`}">${quizDirection==='en'?opt.r:opt.e}</div>`).join('')}</div>${q.answered?`<button class="fbtn fb-ok" style="margin-top:20px" onclick="nextQuizWrap(${lid})">Следующий →</button>`:''}</div>`; }
     function answerQuizWrap(idx,lid) { if(quizCurrent.answered) return; let correct = (quizCurrent.options[idx].e === quizCurrent.correct.e); let targetEl = document.querySelectorAll('.quiz-option-card')[idx]; if(correct) { animateElement(targetEl, 'correct'); showFloatingMessage("✅ +10 очков!", 1000); } else { animateElement(targetEl, 'wrong'); showFloatingMessage("❌ Неправильно!", 1000); } quizCurrent.answered=true; quizCurrent.selectedIdx=idx; quizTotal++; if(correct) { quizScore++; addPoints(10); markWord(quizCurrent.correct.e); } else { quizHearts--; if(quizHearts<=0) quizDone=true; } render(); }
     function nextQuizWrap(lid) { generateQuiz(lid); render(); }
-    
-    function renderMatch(lid) { 
-        if(!matchWords.length) initMatch(lid); 
-        if(matchWords.length===0) return `<button class="home-btn" onclick="goHome()">🏠 Домой</button><div class="game-container"><div>Нет слов для матча</div></div>`; 
-        if(matchMatched.size === matchWords.length) { 
-            addPoints(15); 
-            return `<button class="home-btn" onclick="goHome()">🏠 Домой</button><div class="game-container"><div style="text-align:center"><div>🎉 Победа! +15 очков</div><button class="back-btn" onclick="initMatch(${lid});render()">Новый раунд</button></div></div>`; 
-        } 
-        let enList = matchWords.map((w,i)=>({text:w.e, idx:i})); 
-        let ruList = shuffle(matchWords.map((w,i)=>({text:w.r, idx:i}))); 
-        return `<button class="home-btn" onclick="goHome()">🏠 Домой</button><div class="game-container"><div style="margin-bottom:12px">Совпадений: ${matchMatched.size}/${matchWords.length}</div><div class="match-grid"><div class="match-col">${enList.map(item=>`<div class="match-item ${matchMatched.has(item.idx)?'matched-correct':''} ${matchSelections.en===item.idx?'selected':''}" data-en-idx="${item.idx}" onclick="selectMatchWrap('en',${item.idx},${lid})">${item.text}</div>`).join('')}</div><div class="match-col">${ruList.map(item=>`<div class="match-item ${matchMatched.has(item.idx)?'matched-correct':''} ${matchSelections.ru===item.idx?'selected':''}" data-ru-idx="${item.idx}" onclick="selectMatchWrap('ru',${item.idx},${lid})">${item.text}</div>`).join('')}</div></div></div>`; 
-    }
-    
-    function selectMatchWrap(type, idx, lid) { 
-        if(matchMatched.has(idx)) return; 
-        if(matchWrongFlag) return;
-        if(type === 'en') { 
-            if(matchSelections.en === idx) { matchSelections.en = null; render(); return; }
-            matchSelections.en = idx; 
-        } else { 
-            if(matchSelections.ru === idx) { matchSelections.ru = null; render(); return; }
-            matchSelections.ru = idx; 
-        } 
-        if(matchSelections.en !== null && matchSelections.ru !== null) { 
-            if(matchSelections.en === matchSelections.ru) { 
-                matchMatched.add(matchSelections.en); 
-                addPoints(5); 
-                markWord(matchWords[matchSelections.en].e); 
-                showFloatingMessage("🔗 Пара найдена! +5", 1000);
-                matchSelections = { en: null, ru: null }; 
-                render(); 
-            } else { 
-                matchWrongFlag = true;
-                let enEl = document.querySelector(`.match-item[data-en-idx="${matchSelections.en}"]`);
-                let ruEl = document.querySelector(`.match-item[data-ru-idx="${matchSelections.ru}"]`);
-                if(enEl) { enEl.classList.add('wrong-flash'); setTimeout(() => enEl.classList.remove('wrong-flash'), 400); }
-                if(ruEl) { ruEl.classList.add('wrong-flash'); setTimeout(() => ruEl.classList.remove('wrong-flash'), 400); }
-                showFloatingMessage("❌ Неправильная пара! Попробуйте ещё раз", 1000);
-                matchSelections = { en: null, ru: null };
-                setTimeout(() => { matchWrongFlag = false; render(); }, 450);
-                render();
-            } 
-        } else { 
-            render(); 
-        } 
-    }
-    
+    function renderMatch(lid) { if(!matchWords.length) initMatch(lid); if(matchWords.length===0) return `<button class="home-btn" onclick="goHome()">🏠 Домой</button><div class="game-container"><div>Нет слов для матча</div></div>`; if(matchMatched.size === matchWords.length) { addPoints(15); return `<button class="home-btn" onclick="goHome()">🏠 Домой</button><div class="game-container"><div style="text-align:center"><div>🎉 Победа! +15 очков</div><button class="back-btn" onclick="initMatch(${lid});render()">Новый раунд</button></div></div>`; } let enList = matchWords.map((w,i)=>({text:w.e, idx:i})); let ruList = shuffle(matchWords.map((w,i)=>({text:w.r, idx:i}))); return `<button class="home-btn" onclick="goHome()">🏠 Домой</button><div class="game-container"><div style="margin-bottom:12px">Совпадений: ${matchMatched.size}/${matchWords.length}</div><div class="match-grid"><div class="match-col">${enList.map(item=>`<div class="match-item ${matchMatched.has(item.idx)?'matched-correct':''} ${matchSelections.en===item.idx?'selected':''}" data-en-idx="${item.idx}" onclick="selectMatchWrap('en',${item.idx},${lid})">${item.text}</div>`).join('')}</div><div class="match-col">${ruList.map(item=>`<div class="match-item ${matchMatched.has(item.idx)?'matched-correct':''} ${matchSelections.ru===item.idx?'selected':''}" data-ru-idx="${item.idx}" onclick="selectMatchWrap('ru',${item.idx},${lid})">${item.text}</div>`).join('')}</div></div></div>`; }
+    function selectMatchWrap(type, idx, lid) { if(matchMatched.has(idx)) return; if(matchWrongFlag) return; if(type === 'en') { if(matchSelections.en === idx) { matchSelections.en = null; render(); return; } matchSelections.en = idx; } else { if(matchSelections.ru === idx) { matchSelections.ru = null; render(); return; } matchSelections.ru = idx; } if(matchSelections.en !== null && matchSelections.ru !== null) { if(matchSelections.en === matchSelections.ru) { matchMatched.add(matchSelections.en); addPoints(5); markWord(matchWords[matchSelections.en].e); showFloatingMessage("🔗 Пара найдена! +5", 1000); matchSelections = { en: null, ru: null }; render(); } else { matchWrongFlag = true; showFloatingMessage("❌ Неправильная пара!", 1000); setTimeout(() => { matchWrongFlag = false; render(); }, 400); render(); } } else { render(); } }
     function renderTF(lid) { if(!tfCurrent) initTF(lid); if(!tfCurrent) return `<button class="home-btn" onclick="goHome()">🏠 Домой</button><div class="game-container"><div>Нет слов</div></div>`; if(tfCurrent.answered) return `<button class="home-btn" onclick="goHome()">🏠 Домой</button><div class="game-container"><div>${tfCurrent.correctFlag===tfCurrent.userOk?'✅ Верно +5':'❌ Ошибка'}</div><button class="back-btn" onclick="initTF(${lid});render()">Далее</button></div>`; return `<button class="home-btn" onclick="goHome()">🏠 Домой</button><div class="game-container"><div class="big-card"><div class="flash-word">${tfCurrent.en}</div><div class="flash-translation">→ ${tfCurrent.ru}</div></div><div style="display:flex;gap:16px;justify-content:center"><button class="tfbtn tf-t" onclick="answerTFWrap(true,${lid})">✓ Верно</button><button class="tfbtn tf-f" onclick="answerTFWrap(false,${lid})">✗ Ложь</button></div></div>`; }
     function answerTFWrap(ans,lid) { if(tfCurrent.answered) return; let isCorrect = (ans === tfCurrent.correctFlag); let targetEl = document.querySelector('.big-card'); if(isCorrect) { animateElement(targetEl, 'correct'); showFloatingMessage("✅ +5 очков!", 1000); } else { animateElement(targetEl, 'wrong'); showFloatingMessage("❌ Неверно!", 1000); } tfCurrent.answered=true; tfCurrent.userOk=ans; if(isCorrect) { addPoints(5); markWord(tfCurrent.en); } setTimeout(()=>{ initTF(lid); render(); },1000); render(); }
-    
     function renderTyping(lid) { if(!typingCurrent) initTyping(lid); if(!typingCurrent) return `<button class="home-btn" onclick="goHome()">🏠 Домой</button><div class="game-container"><div>🌟 Все выучено!</div></div>`; return `<button class="home-btn" onclick="goHome()">🏠 Домой</button><div class="game-container"><div class="direction-toggle"><button class="dir-btn ${typingDirection==='en2ru'?'active':''}" onclick="typingDirection='en2ru';initTyping(${lid});render()">🇬🇧→🇷🇺</button><button class="dir-btn ${typingDirection==='ru2en'?'active':''}" onclick="typingDirection='ru2en';initTyping(${lid});render()">🇷🇺→🇬🇧</button></div><div class="typing-card"><div class="flash-word" style="font-size:1.4rem">${typingDirection==='en2ru'? typingCurrent.e : typingCurrent.r}</div><input id="typingInput" class="typing-input" placeholder="Введите перевод..." autocomplete="off"><div class="typing-feedback" style="margin-top:12px">${typingFeedback}</div><button class="fbtn fb-ok" onclick="submitTypingWrap(${lid})">Проверить</button></div></div>`; }
     function submitTypingWrap(lid) { let inp = document.getElementById('typingInput'); if(!inp) return; let input = inp.value; if(typingAnswered) return; let expected = (typingDirection === 'en2ru') ? typingCurrent.r.toLowerCase() : typingCurrent.e.toLowerCase(); if(input.trim().toLowerCase() === expected) { typingFeedback="✅ Верно! +6 очков"; addPoints(6); markWord(typingCurrent.e); showFloatingMessage("✅ +6 очков!", 1000); typingAnswered=true; setTimeout(()=>{ initTyping(lid); render(); },1200); } else { let correctAns = (typingDirection === 'en2ru') ? typingCurrent.r : typingCurrent.e; typingFeedback=`❌ Ошибка. Правильно: "${correctAns}"`; animateElement(document.querySelector('.typing-card'), 'wrong'); showFloatingMessage("❌ Неправильно!", 1000); typingAnswered=true; setTimeout(()=>{ initTyping(lid); render(); },1300); } render(); }
-
-    // Глобальные функции для onclick
+    function renderLettersHome() { return `<button class="home-btn" onclick="goHome()">🏠 Домой</button><div class="global-header"><div class="logo-area"><h1>✉️ Деловая переписка (письма для экзамена)</h1><p>Перевод с русского на английский + вокабуляр (включая обязательную лексику)</p></div></div><div class="game-grid-premium"><div class="game-card-premium" onclick="setLettersSub('phrases')"><div class="game-icon">📚</div><div class="game-title">Словарь фраз</div></div><div class="game-card-premium" onclick="setLettersSub('practice')"><div class="game-icon">✍️</div><div class="game-title">Практика перевода</div></div><div class="game-card-premium" onclick="setLettersSub('match')"><div class="game-icon">🔗</div><div class="game-title">Match фразы</div></div><div class="game-card-premium" onclick="setLettersSub('quiz')"><div class="game-icon">🎯</div><div class="game-title">Quiz фразы</div></div></div><div id="lettersSubContent">${renderLettersSubContent()}</div>`; }
+    function renderLettersSubContent() { if(appState.lettersSub === 'phrases') { return `<div class="full-content-section"><h2>📖 Полезные фразы для писем (EN⇄RU) + обязательная лексика</h2><div class="dict-grid">${LETTER_PHRASES.map(p => `<div class="wcard"><div class="wci"><div class="wen">${p.e}</div><div class="wru">${p.r}</div></div><div class="word-actions"><button class="speaker-btn" onclick="speakText('${p.e.replace(/'/g,"\\'")}')">🔊</button><button class="wlbtn" onclick="markWordPhrase('${p.e.replace(/'/g,"\\'")}')">Запомнить</button></div></div>`).join('')}</div></div>`; } else if(appState.lettersSub === 'practice') { return `<div class="full-content-section"><h2>📝 Переведите письма с русского на английский (подготовка к экзамену)</h2>${LETTERS_PRACTICE.map(l => `<div class="letter-card"><div class="letter-ru"><strong>${l.title}</strong><pre style="white-space:pre-wrap; font-family:inherit;">${l.ru}</pre></div><div class="letter-answer-area"><textarea id="letterAns${l.id}" class="letter-input" rows="4" placeholder="Напишите английский перевод..."></textarea><button class="show-answer-btn" onclick="showLetterAnswer(${l.id})">Показать образец</button><div id="letterHint${l.id}" style="margin-top:8px; color:var(--accent3); font-size:0.9rem;"></div></div></div>`).join('')}</div>`; } else if(appState.lettersSub === 'match') { if(!letterPhraseMatch.length) initLetterMatch(); if(letterMatchMatched.size === letterPhraseMatch.length) return `<div><button class="back-btn" onclick="initLetterMatch();render()">Новый раунд</button><div class="game-container">🎉 Победа! +15 очков</div></div>`; let enList = letterPhraseMatch.map((p,i)=>({text:p.e, idx:i})); let ruList = shuffle(letterPhraseMatch.map((p,i)=>({text:p.r, idx:i}))); return `<div><button class="back-btn" onclick="initLetterMatch();render()">Перемешать</button><div class="match-grid"><div class="match-col">${enList.map(item=>`<div class="match-item ${letterMatchMatched.has(item.idx)?'matched-correct':''} ${letterMatchSelections.en===item.idx?'selected':''}" onclick="selectLetterMatch('en',${item.idx})">${item.text}</div>`).join('')}</div><div class="match-col">${ruList.map(item=>`<div class="match-item ${letterMatchMatched.has(item.idx)?'matched-correct':''} ${letterMatchSelections.ru===item.idx?'selected':''}" onclick="selectLetterMatch('ru',${item.idx})">${item.text}</div>`).join('')}</div></div></div>`; } else if(appState.lettersSub === 'quiz') { if(!letterQuizCurrent) initLetterQuiz(); if(letterQuizCurrent && letterQuizCurrent.answered) return `<div><button class="back-btn" onclick="nextLetterQuiz()">Следующий</button><div>Результат: ${letterQuizScore}/${letterQuizTotal}</div></div>`; if(!letterQuizCurrent) return `<div>Загрузка...</div>`; let q = letterQuizCurrent; return `<div class="game-container"><div class="big-card"><div class="flash-word">${q.correct.r}</div><div style="margin-top:8px;">Выберите правильный перевод:</div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">${q.options.map((opt,i)=>`<div class="quiz-option-card ${q.answered?(opt.e===q.correct.e?'qcor':(q.selectedIdx===i?'qwrg':'')):''}" onclick="${q.answered?'':`answerLetterQuiz(${i})`}">${opt.e}</div>`).join('')}</div></div>`; } return ''; }
+    function selectLetterMatch(type, idx) { if(letterMatchMatched.has(idx)) return; if(letterMatchWrongFlag) return; if(type === 'en') { if(letterMatchSelections.en === idx) { letterMatchSelections.en = null; render(); return; } letterMatchSelections.en = idx; } else { if(letterMatchSelections.ru === idx) { letterMatchSelections.ru = null; render(); return; } letterMatchSelections.ru = idx; } if(letterMatchSelections.en !== null && letterMatchSelections.ru !== null) { if(letterMatchSelections.en === letterMatchSelections.ru) { letterMatchMatched.add(letterMatchSelections.en); addPoints(5); showFloatingMessage("🔗 Пара найдена! +5", 1000); letterMatchSelections = { en: null, ru: null }; render(); } else { letterMatchWrongFlag = true; showFloatingMessage("❌ Неправильная пара", 1000); setTimeout(() => { letterMatchWrongFlag = false; render(); }, 400); render(); } } else { render(); } }
+    function answerLetterQuiz(idx) { if(letterQuizCurrent.answered) return; let correct = (letterQuizCurrent.options[idx].e === letterQuizCurrent.correct.e); letterQuizCurrent.answered = true; letterQuizCurrent.selectedIdx = idx; letterQuizTotal++; if(correct) { letterQuizScore++; addPoints(8); showFloatingMessage("✅ +8 очков!", 1000); } else { showFloatingMessage("❌ Неверно!", 1000); } render(); }
+    function nextLetterQuiz() { generateLetterQuiz(); render(); }
+    function markWordPhrase(phrase) { showFloatingMessage(`Фраза добавлена в активный словарь`, 1200); addPoints(2); }
+    function showLetterAnswer(id) { let letter = LETTERS_PRACTICE.find(l=>l.id===id); if(letter) document.getElementById(`letterHint${id}`).innerHTML = `<strong>Пример перевода:</strong><br>${letter.en_model}`; }
+    function setLettersSub(sub) { appState.lettersSub = sub; if(sub === 'match') initLetterMatch(); if(sub === 'quiz') initLetterQuiz(); render(); }
     window.filterDict = () => { let val = document.getElementById('dictSearch')?.value.toLowerCase()||''; document.querySelectorAll('#dictGrid .wcard').forEach(c=>c.style.display=c.innerText.toLowerCase().includes(val)?'':'none'); };
     window.toggleWord = (en,lid) => { if(learnedWords.has(en)) unmarkWord(en); else markWord(en); render(); };
     window.toggleAccordion = (el) => { let content = el.nextElementSibling; content.classList.toggle('show'); };
-    window.goHome = () => { appState = { screen: "home", lessonId: 0 }; render(); };
+    window.goHome = () => { appState = { screen: "home", lessonId: 0, lettersSub: "practice" }; render(); };
     window.goToLesson = (lid) => { appState = { screen: "lhome", lessonId: lid }; render(); };
     window.startGame = (game, lid) => { appState = { screen: game, lessonId: lid }; if(game==='flash') initFlash(lid); if(game==='quiz') initQuiz(lid); if(game==='match') initMatch(lid); if(game==='tf') initTF(lid); if(game==='typing') initTyping(lid); render(); };
     window.startGlobal = (game) => window.startGame(game, 0);
-    
-    function render() {
-        let s = appState.screen, lid = appState.lessonId;
-        let html = "";
-        if(s === "home") html = renderHome();
-        else if(s === "lhome") html = renderLessonMenu(lid);
-        else if(s === "dict") html = renderDictionary(lid);
-        else if(s === "flash") html = renderFlash(lid);
-        else if(s === "quiz") html = renderQuiz(lid);
-        else if(s === "match") html = renderMatch(lid);
-        else if(s === "tf") html = renderTF(lid);
-        else if(s === "typing") html = renderTyping(lid);
-        else html = renderHome();
-        document.getElementById('vapp').innerHTML = html;
-        if(document.getElementById('resetBtn')) document.getElementById('resetBtn').onclick = () => { if(confirm("Сбросить весь прогресс?")){ globalScore=0; learnedWords.clear(); unlockedBadges.clear(); saveProgress(); render(); } };
-    }
-    
-    loadProgress();
-    render();
+    window.goToLetters = () => { appState = { screen: "letters", lessonId: 0, lettersSub: "practice" }; initLetterMatch(); initLetterQuiz(); render(); };
+    function render() { let s = appState.screen; let html = ""; if(s === "home") html = renderHome(); else if(s === "lhome") html = renderLessonMenu(appState.lessonId); else if(s === "dict") html = renderDictionary(appState.lessonId); else if(s === "flash") html = renderFlash(appState.lessonId); else if(s === "quiz") html = renderQuiz(appState.lessonId); else if(s === "match") html = renderMatch(appState.lessonId); else if(s === "tf") html = renderTF(appState.lessonId); else if(s === "typing") html = renderTyping(appState.lessonId); else if(s === "letters") html = renderLettersHome(); else html = renderHome(); document.getElementById('vapp').innerHTML = html; if(document.getElementById('resetBtn')) document.getElementById('resetBtn').onclick = () => { if(confirm("Сбросить весь прогресс?")){ globalScore=0; learnedWords.clear(); unlockedBadges.clear(); saveProgress(); render(); } }; }
+    loadProgress(); render();
 </script>
 </body>
 </html>
+```
